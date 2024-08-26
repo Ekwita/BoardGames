@@ -1,3 +1,13 @@
-<div>
-    <!-- It is not the man who has too little, but the man who craves more, that is poor. - Seneca -->
-</div>
+@extends('base')
+
+@section('title')
+    <label for="">
+        Winner: #label>
+    @endsection
+
+    @section('content')
+        <div class="grid grid-cols-4">
+        </div>
+        <br>
+        <a href="#"><button>End</button></a>
+    @endsection
