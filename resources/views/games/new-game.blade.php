@@ -28,7 +28,7 @@
     <div class="flex flex-wrap">
         <div class="basis-1/2 p-4">
             <h3>Player select</h3>
-            <form action="" method="post">
+            <form action="{{ route('games.selectPlayers') }}" method="post">
                 @csrf
                 @for ($i = 1; $i <= 6; $i++)
                     <div class="mb-4">
@@ -36,6 +36,9 @@
                             {{ $i }}</label>
                         <select name="player{{ $i }}" id="player{{ $i }}"
                             class="w-full mt-2 p-2 border border-gray-300 rounded-md">
+                            @foreach ($players as $player)
+                                <option value="{{ $player->player_name }}">{{ $player->player_name }}</option>
+                            @endforeach
                             <option selected="selected" value="">none</option>
                         </select>
                     </div>
@@ -51,7 +54,7 @@
 
             <div class="newplayer">
                 <h3>Create new player</h3>
-                <form action="" method="post">
+                <form action="{{ route('players.store') }}" method="post">
                     @csrf
                     <div class="mb-4">
                         <label for="name" class="block font-medium">Name</label>

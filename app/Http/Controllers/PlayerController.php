@@ -2,33 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePlayerRequest;
 use App\Models\Player;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class PlayerController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the players.
      */
-    public function index()
+    public function index(): View
     {
-        
+        $players = Player::all();
+        return view('players.list', ['players' => $players]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created player in storage.
      */
-    public function create()
+    public function store(StorePlayerRequest $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        $validatedName = $request->input('player_name');
+        Player::create([
+            'player_name' => $validatedName
+        ]);
+        return back();
     }
 
     /**
@@ -36,7 +35,7 @@ class PlayerController extends Controller
      */
     public function show(Player $player)
     {
-        //
+        return view('players.statistic', ['player' => $player]);
     }
 
     /**
