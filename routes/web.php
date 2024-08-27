@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\PlayerController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('base');
+/**
+ * Home page
+ */
+Route::get('/', [HomePageController::class, 'index'])->name('base');
 
 /**
  * Routes for players resource operation

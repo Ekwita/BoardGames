@@ -15,8 +15,28 @@ class GameController extends Controller
      */
     public function gamesList(): View
     {
-        $games = Game::all();
-        return view('games.list', ['games' => $games]);
+
+        $allGameIds = Game::pluck('id');
+        if ($allGameIds->isEmpty()) {
+            $gamesStatistics = null;
+        } else {
+            $gamesStatistics = Result::whereIn('game_id', $allGameIds)->get()->groupBy('game_id');
+        }
+
+
+        if ($gamesStatistics != null) {
+
+            $gameIds = $gamesStatistics->keys();
+            $games = Game::whereIn('id', $gameIds)->orderByDesc('id')->paginate(1);
+            $winner = '';
+            foreach ($games as $game) {
+                $gameId = $game->id;
+                $winner = Game::where('id', $gameId)->value('winner');
+            }
+            return view('games.list', ['games' => $games, 'gameStatistics' => $gamesStatistics, 'winner' => $winner]);
+        } else {
+            return view('games.list', ['games' => null]);
+        }
     }
 
     /**
@@ -219,6 +239,4 @@ class GameController extends Controller
         $request->session()->flush();
         return view('games.result', ['results' => $results, 'winner' => $winner]);
     }
-
-    
 }

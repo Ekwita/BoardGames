@@ -6,17 +6,17 @@
 
 @section('nav')
     <div class="grid grid-cols-3 gap-4 justify-items-center">
-        <a href="#">
+        <a href="{{ route('base') }}">
             <div class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 text-base font-medium">
                 Home
             </div>
         </a>
-        <a href="#">
+        <a href="{{ route('players.index') }}">
             <div class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 text-base font-medium">
                 Players
             </div>
         </a>
-        <a href="#">
+        <a href="{{ route('games.index') }}">
             <div class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 text-base font-medium">
                 Games
             </div>
