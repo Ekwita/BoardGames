@@ -19,7 +19,7 @@
             <div>Victories: {{ $player->wins }}</div>
             <div>Deaths: {{ $player->deaths }}</div>
             <div>Best score: {{ $player->best }}</div>
-            <div>Total gold: {{ $player->totalgold }}</div>
+            <div>Total gold: {{ $player->totalGold }}</div>
             <div>Artifact 5: {{ $player->art5 }}</div>
             <div>Artifact 7: {{ $player->art7 }}</div>
             <div>Artifact 10: {{ $player->art10 }}</div>

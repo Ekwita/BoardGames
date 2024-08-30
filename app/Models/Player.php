@@ -16,7 +16,7 @@ class Player extends Model
         'deaths',
         'best',
         'average',
-        'totalgold',
+        'totalGold',
         'art5',
         'art7',
         'art10',

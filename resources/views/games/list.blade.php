@@ -27,69 +27,65 @@
     @if (isset($games))
         <div>
             @foreach ($games as $game)
-                @if (isset($gameStatistics[$game->id]))
-                    <label for=""><strong>Winner: {{ $winner }}</strong></label>
-                    <div class="results grid grid-cols-4 gap-4">
+                <label for=""><strong>Winner: {{ $game->winner }}</strong></label>
+                <div class="results grid grid-cols-4 gap-4">
 
-                        @foreach ($gameStatistics[$game->id] as $statistic)
-                            <div class="player">
+                    @foreach ($game->statistics as $statistic)
+                        <div class="player">
+                            <div>
+                                <label for=""> <strong>Name: <a
+                                            href="{{ route('players.show', ['player' => $statistic->player_id]) }}">{{ strToUpper($statistic->player_name) }}</a></strong></label>
+                            </div>
+                            <div class="status">
+                                <label for="">Status:
+                                    @switch($statistic->status)
+                                        @case(1)
+                                            Dead
+                                        @break
+
+                                        @case(2)
+                                            Survived
+                                        @break
+
+                                        @case(3)
+                                            Escaped
+                                        @break
+
+                                        @default
+                                    @endswitch
+                                </label>
+                            </div>
+                            @if ($statistic->status != 1)
                                 <div>
-                                    <label for=""> <strong>Name: <a
-                                                href="{{ route('players.show', ['player' => $statistic->player_id]) }}">{{ $statistic->player_name }}</a></strong></label>
-                                </div>
-                                <div class="status">
-                                    <label for="">Status:
-                                        @switch($statistic->status)
-                                            @case(1)
-                                                Dead
-                                            @break
-
-                                            @case(2)
-                                                Survived
-                                            @break
-
-                                            @case(3)
-                                                Escaped
-                                            @break
-
-                                            @default
-                                        @endswitch
+                                    <label for="">Artifacts:
+                                        <br>
+                                        @foreach (range(1, 30) as $number)
+                                            @if ($statistic->{'art' . $number} == true)
+                                                Artifact for {{ $number }} points.
+                                                <br>
+                                            @endif
+                                        @endforeach
                                     </label>
                                 </div>
-                                @if ($statistic->status != 1)
-                                    <div>
-                                        <label for="">Artifacts
-                                            <br>
-                                            @foreach (range(1, 30) as $number)
-                                                @if ($statistic->{'art' . $number} == true)
-                                                    Artifact for {{ $number }} points.
-                                                    <br>
-                                                @endif
-                                            @endforeach
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <label for="">Gold: {{ $statistic->gold }}</label>
-                                    </div>
-                                    <div>
-                                        <label for="">Tokens: {{ $statistic->tokens }}</label>
-                                    </div>
-                                    <div>
-                                        <label for="">Cards:{{ $statistic->cards }}</label>
-                                    </div>
-                                    <div>
-                                        <label for="">Total: {{ $statistic->total_points }}</label>
-                                    </div>
-                                @endif
-                            </div>
-                        @endforeach
+                                <div>
+                                    <label for="">Gold: {{ $statistic->gold }}</label>
+                                </div>
+                                <div>
+                                    <label for="">Tokens: {{ $statistic->tokens }}</label>
+                                </div>
+                                <div>
+                                    <label for="">Cards:{{ $statistic->cards }}</label>
+                                </div>
+                                <div>
+                                    <label for="">Total: {{ $statistic->total_points }}</label>
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
 
-                    </div>
-                    <strong><label for="">Date:
-                            {{ date('d:m:Y', strtotime($game->created_at)) }}</label></strong>
-                @else
-                    <strong>Error! No data!</strong>
-                @endif
+                </div>
+                <strong><label for="">Date:
+                        {{ $game->createdAt }}</label></strong>
             @endforeach
         </div>
         <div class="">

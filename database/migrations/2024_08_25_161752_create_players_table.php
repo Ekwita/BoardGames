@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('deaths')->default('0');
             $table->integer('best')->default('0');
             $table->integer('average')->default('0');
-            $table->integer('totalgold')->default('0');
+            $table->integer('totalGold')->default('0');
             $table->integer('art5')->default('0');
             $table->integer('art7')->default('0');
             $table->integer('art10')->default('0');
