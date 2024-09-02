@@ -76,8 +76,8 @@
                         <div class="mb-3">
                             <label for="total" class="block mb-1">Total points: </label>
                             <!-- Assuming total points input is for display only -->
-                            <input type="number" id="total_{{ $player }}" name="total_{{ $player }}"
-                                value="0" readonly class="w-full p-2 bg-gray-600 text-gray-200 rounded">
+                            {{-- <input type="number" id="total_{{ $player }}" name="total_{{ $player }}"
+                                value="0" readonly class="w-full p-2 bg-gray-600 text-gray-200 rounded"> --}}
                         </div>
                     </div>
                 @endif

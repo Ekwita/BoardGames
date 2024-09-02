@@ -2,18 +2,23 @@
 
 namespace App\Services;
 
+use App\DTOs\AllPlayersResultsDTO;
 use App\DTOs\GameDataDTO;
-use App\DTOs\GameDTO;
+use App\DTOs\GamesListDTO;
+use App\DTOs\OnePlayerResultDTO;
 use App\Models\Game;
 use App\Models\Player;
 use App\Models\Result;
-use App\Services\Interfaces\GameServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class GameService implements GameServiceInterface
+class GameService
 {
 
+    /**
+     * Get list of all games and return data to controller
+     * @return array
+     */
     public function getGamesList(): array
     {
 
@@ -32,7 +37,7 @@ class GameService implements GameServiceInterface
             $statistics = $gamesStatiscitcs->get($gameId, collect());
             $createdAt = $game->created_at ? $game->created_at->format('d-m-Y H:i:s') : null;
 
-            return new GameDTO(
+            return new GamesListDTO(
                 gameId: $gameId,
                 winner: $winner,
                 statistics: $statistics,
@@ -52,62 +57,70 @@ class GameService implements GameServiceInterface
     }
 
 
-    public function updateWinner() {}
 
-
-
-
-    // Code to create new game
-    public function createData(Request $request)
+    /**
+     * Create new GameDataDTO object
+     * Put data to session
+     * @param \Illuminate\Http\Request $request
+     * @return void
+     */
+    public function createData(Request $request): void
     {
         $gameId = $this->getLastGame();
+
         $gamePlayers = $this->selectPlayersInGame($request);
-
-        $gameData = new GameDataDTO($gameId, $gamePlayers);
-        return $gameData;
-    }
-    public function getLastGame(): int
-    {
-        $latestGame = Game::latest()->first();
-        $lastGameId = $latestGame ? $latestGame->id : 0;
-        $newGameId = $lastGameId + 1;
-
-        return $newGameId;
-    }
-
-    public function selectPlayersInGame(Request $request): array
-    {
-        $selectedPlayers = [];
-
-        for ($playerNumber = 1; $playerNumber <= 6; $playerNumber++) {
-            $key = 'player' . $playerNumber;
-            $inputValue = $request->input($key);
-
-            if ($inputValue !== null) {
-                $selectedPlayers[$key] = $inputValue;
-            }
+        // dd($gamePlayers);
+        $playersResultCollection = new Collection();
+        foreach ($gamePlayers as $player) {
+            $playerResult = new OnePlayerResultDTO(
+                playerName: $player
+            );
+            $playersResultCollection->push($playerResult);
         }
+        $allPlayersResults = new AllPlayersResultsDTO($playersResultCollection);
 
-        return $selectedPlayers;
+
+        $gameData = new GameDataDTO($gameId, allPlayersResults: $allPlayersResults);
+        // dd($gameData);
+        $request->session()->put('gameData', $gameData);
     }
 
-    public function pointsCalculator(GameDataDTO $gameData, Request $request)
+    /**
+     * Get players list from session
+     */
+    public function getPlayersFromSession(): Collection
     {
+        $gameData = session()->get('gameData');
+
+        $players = $gameData->allPlayersResults->playersResults->map(function ($playerResult) {
+            return $playerResult->playerName;
+        });
+
+        return $players;
+    }
+
+    /**
+     * Calculate points for each player
+     * @return array
+     */
+    public function pointsCalculator(Request $request)
+    {
+        $gameData = $request->session()->get('gameData');
+
         $bestScore = 0;
         $bestArticaft = 0;
+        $bestPlayer = '';
 
         $this->createGame();
 
-        $bestPlayer = '';
         foreach ($gameData->players as $player) {
-
             $playerId = Player::where('player_name', $player)->value('id');
-
             $status = $request->input('status_' . $player);
 
             $statusPoints = ($status == 3) ? 20 : 0;
             $playerBestArtifact = 0;
             $totalPoints = 0;
+
             if ($status != 1) {
 
                 $gold = ($request->input('gold_' . $player) != null) ? $request->input('gold_' . $player) : 0;
@@ -141,8 +154,19 @@ class GameService implements GameServiceInterface
                 $totalPoints = $statusPoints + $totalArtifactsPoints + $gold + $tokens + $cards;
 
                 $data = [
+                    'game_id' => $gameData->id,
+                    'player_id' => $playerId,
                     'player' => $player,
                     'status' => $status,
+                    'art5' => $request->has('art5_' . $player),
+                    'art7' => $request->has('art7_' . $player),
+                    'art10' => $request->has('art10_' . $player),
+                    'art12' => $request->has('art12_' . $player),
+                    'art15' => $request->has('art15_' . $player),
+                    'art17' => $request->has('art17_' . $player),
+                    'art20' => $request->has('art20_' . $player),
+                    'art25' => $request->has('art25_' . $player),
+                    'art30' => $request->has('art30_' . $player),
                     'gold' => $gold,
                     'tokens' => $tokens,
                     'cards' => $cards,
@@ -213,6 +237,61 @@ class GameService implements GameServiceInterface
             Player::where('player_name', $bestPlayer)->increment('wins', 1);
         }
 
+
+        $resultData = $this->createResultData($gameData);
+
+
+        $request->session()->flush();
+        return $resultData;
+    }
+
+    /**
+     * Create id for new game based on id of the last game
+     * @return int
+     */
+    private function getLastGame(): int
+    {
+        $latestGame = Game::latest()->first();
+        $lastGameId = $latestGame ? $latestGame->id : 0;
+        $newGameId = $lastGameId + 1;
+
+        return $newGameId;
+    }
+
+    /**
+     * Summary of selectPlayersInGame
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     */
+    private function selectPlayersInGame(Request $request): array
+    {
+        $selectedPlayers = [];
+
+        for ($playerNumber = 1; $playerNumber <= 6; $playerNumber++) {
+            $key = 'player' . $playerNumber;
+            $inputValue = $request->input($key);
+
+            if ($inputValue !== null) {
+                $selectedPlayers[$key] = $inputValue;
+            }
+        }
+
+        return $selectedPlayers;
+    }
+
+    /**
+     * Create and add new game to database
+     * Create Game as DTO object
+     * @return GamesListDTO
+     */
+    private function createGame(): GamesListDTO
+    {
+        $game = Game::create([]);
+        return new GamesListDTO($game->id, $game->winner, null, $game->created_at);
+    }
+
+    private function createResultData($gameData)
+    {
         $results = Result::where('game_id', $gameData->id)
             ->orderByDesc('total_points')
             ->orderByDesc('art30')
@@ -226,7 +305,6 @@ class GameService implements GameServiceInterface
             ->orderByDesc('art5')
             ->get();
 
-
         $winner = Game::where('id', $gameData->id)->value('winner');
 
         $resultData = [
@@ -235,11 +313,5 @@ class GameService implements GameServiceInterface
         ];
 
         return $resultData;
-    }
-
-    private function createGame()
-    {
-        $game = Game::create([]);
-        return new GameDTO($game->id, $game->winner, null, $game->created_at);
     }
 }

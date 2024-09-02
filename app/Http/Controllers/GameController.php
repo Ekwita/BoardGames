@@ -18,7 +18,7 @@ class GameController extends Controller
     public function gamesList()
     {
         $games = $this->gameService->getGamesList();
-        // dd($games);
+
         return view('games.list', ['games' => $games['games']]);
     }
 
@@ -39,11 +39,7 @@ class GameController extends Controller
     public function selectPlayers(Request $request): RedirectResponse
     {
         //Get id of the last game and create ID for new game.
-        $gameData = $this->gameService->createData($request);
-
-        //Put game and players data to session
-        $request->session()->put('gameData', $gameData);
-
+        $this->gameService->createData($request);
 
         //Redirect to route counting points
         return redirect()->route('games.pointsForm');
@@ -54,22 +50,19 @@ class GameController extends Controller
      */
     public function pointsForm(): View
     {
-        $gameData = session()->get('gameData');
-        $players = $gameData->players;
+        $players = $this->gameService->getPlayersFromSession();
         return view('games.points', ['players' => $players]);
     }
+
+
 
     /**
      * Calculate player points.
      */
-    public function pointsCalculate(Request $request)
+    public function pointsCalculate(Request $request): View
     {
-        $gameData = $request->session()->get('gameData');
+        $resultData = $this->gameService->pointsCalculator($request);
 
-        $resultData = $this->gameService->pointsCalculator($gameData, $request);
-
-        // dd($resultData);
-        $request->session()->flush();
         return view('games.result', ['results' => $resultData['results'], 'winner' => $resultData['winner']]);
     }
 }
