@@ -20,9 +20,9 @@ Route::resource('players', PlayerController::class);
  */
 Route::prefix('games')->group(function () {
     Route::controller(GameController::class)->group(function () {
-        Route::get('/list', 'gamesList')->name('games.index'); // Working
-        Route::get('/new-game', 'startNewGame')->name('games.newGame'); //Working
-        Route::post('/new-game', 'selectPlayers')->name('games.selectPlayers'); //Working
+        Route::get('/list', 'gamesList')->name('games.index');
+        Route::get('/new-game', 'startNewGame')->name('games.newGame');
+        Route::post('/new-game', 'selectPlayers')->name('games.selectPlayers');
         Route::get('/new-game/points', 'pointsForm')->name('games.pointsForm');
         Route::post('/new-game/points', 'pointsCalculate')->name('games.pointsCalculate');
     });

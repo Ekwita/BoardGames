@@ -22,4 +22,5 @@ class OnePlayerResultDTO
         public ?int $cards = null,
         public ?int $totalPoints = null,
     ) {}
+
 }

@@ -4,10 +4,9 @@ namespace App\Services;
 
 use App\DTOs\PlayerDTO;
 use App\Models\Player;
-use App\Services\Interfaces\PlayerServiceInterface;
 use Illuminate\Support\Collection;
 
-class PlayerService implements PlayerServiceInterface
+class PlayerService
 {
     public function getAllPlayers(): Collection
     {
@@ -68,6 +67,9 @@ class PlayerService implements PlayerServiceInterface
             'art30' => $playerDTO->art30,
         ]);
     }
+
+
+    //PRIVATE FUNCTIONS
 
     private function mapToDTO(Player $player): PlayerDTO
     {

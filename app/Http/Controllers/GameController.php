@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Player;
 use App\Services\GameService;
+use App\Services\StatisticsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -12,12 +13,13 @@ class GameController extends Controller
 {
 
     public function __construct(private GameService $gameService) {}
+    
     /**
      * Display a listing of the resource.
      */
-    public function gamesList()
+    public function gamesList(StatisticsService $statisticsService): View
     {
-        $games = $this->gameService->getGamesList();
+        $games = $statisticsService->getGamesList();
 
         return view('games.list', ['games' => $games['games']]);
     }
@@ -50,14 +52,14 @@ class GameController extends Controller
      */
     public function pointsForm(): View
     {
-        $players = $this->gameService->getPlayersFromSession();
+        $players = $this->gameService->getPlayers();
         return view('games.points', ['players' => $players]);
     }
 
 
 
     /**
-     * Calculate player points.
+     * Calculate player points and show the result.
      */
     public function pointsCalculate(Request $request): View
     {

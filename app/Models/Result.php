@@ -33,5 +33,10 @@ class Result extends Model
     public function game(): BelongsTo
     {
         return $this->belongsTo(Game::class);
-    } 
+    }
+
+    public function player(): BelongsTo
+    {
+        return $this->belongsTo(Player::class);
+    }
 }

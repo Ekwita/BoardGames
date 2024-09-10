@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('results', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('game_id');
-            $table->unsignedBigInteger('player_id');
+            $table->foreignId('game_id')->constrained();
+            $table->foreignId('player_id')->constrained();
             $table->string('player_name');
             $table->integer('status');
             $table->integer('gold')->nullable()->default(0);
@@ -30,8 +30,6 @@ return new class extends Migration
             $table->boolean('art25')->nullable()->default(0);
             $table->boolean('art30')->nullable()->default(0);
             $table->integer('total_points');
-            $table->foreign('player_id')->references('id')->on('players');
-            $table->foreign('game_id')->references('id')->on('games');
             $table->timestamps();
         });
     }

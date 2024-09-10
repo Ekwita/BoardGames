@@ -4,18 +4,16 @@ namespace App\Http\Controllers;
 
 use App\DTOs\PlayerDTO;
 use App\Http\Requests\StorePlayerRequest;
-use App\Models\Player;
 use App\Services\PlayerService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PlayerController extends Controller
 {
 
     public function __construct(private PlayerService $playerService) {}
+
     /**
-     * 
      * Display a listing of the players.
      */
     public function index(): View
@@ -44,13 +42,5 @@ class PlayerController extends Controller
     {
         $playerDTO = $this->playerService->getPlayerById($id);
         return view('players.statistic', ['player' => $playerDTO]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Player $player)
-    {
-        //
     }
 }

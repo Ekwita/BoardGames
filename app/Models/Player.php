@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Player extends Model
 {
@@ -27,4 +28,9 @@ class Player extends Model
         'art25',
         'art30'
     ];
+
+    public function results(): HasMany
+    {
+        return $this->hasMany(Result::class);
+    }
 }
