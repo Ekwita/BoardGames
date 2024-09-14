@@ -6,6 +6,7 @@ use App\DTOs\AllPlayersResultsDTO;
 use App\DTOs\GameDataDTO;
 use App\DTOs\GamesListDTO;
 use App\DTOs\OnePlayerResultDTO;
+use App\Enums\ArtifactType;
 use App\Models\Game;
 use App\Models\Player;
 use App\Models\Result;
@@ -76,29 +77,38 @@ class GameService
                 $tokens = $request->input('tokens_' . $selectedPlayer);
                 $cards = $request->input('cards_' . $selectedPlayer);
 
-
-                $artifacts = [
-                    'art5_' . $selectedPlayer => 5,
-                    'art7_' . $selectedPlayer => 7,
-                    'art10_' . $selectedPlayer => 10,
-                    'art12_' . $selectedPlayer => 12,
-                    'art15_' . $selectedPlayer => 15,
-                    'art17_' . $selectedPlayer => 17,
-                    'art20_' . $selectedPlayer => 20,
-                    'art25_' . $selectedPlayer => 25,
-                    'art30_' . $selectedPlayer => 30,
-                ];
-
                 $totalArtifactsPoints = 0;
 
-                foreach ($artifacts as $artifactName => $artifactPoints) {
-                    if ($request->has($artifactName)) {
-                        $totalArtifactsPoints += $artifactPoints;
+                foreach (ArtifactType::getAllArtifacts() as $artifactPoints) {
+                    if ($request->has('art' . $artifactPoints->value . '_' . $selectedPlayer)) {
+                        $totalArtifactsPoints += $artifactPoints->value;
                         if ($artifactPoints > $playerBestArtifact) {
                             $playerBestArtifact = $artifactPoints;
                         }
                     }
                 }
+                // $artifacts = [
+                //     'art5_' . $selectedPlayer => 5,
+                //     'art7_' . $selectedPlayer => 7,
+                //     'art10_' . $selectedPlayer => 10,
+                //     'art12_' . $selectedPlayer => 12,
+                //     'art15_' . $selectedPlayer => 15,
+                //     'art17_' . $selectedPlayer => 17,
+                //     'art20_' . $selectedPlayer => 20,
+                //     'art25_' . $selectedPlayer => 25,
+                //     'art30_' . $selectedPlayer => 30,
+                // ];
+
+                // $totalArtifactsPoints = 0;
+
+                // foreach ($artifacts as $artifactName => $artifactPoints) {
+                //     if ($request->has($artifactName)) {
+                //         $totalArtifactsPoints += $artifactPoints;
+                //         if ($artifactPoints > $playerBestArtifact) {
+                //             $playerBestArtifact = $artifactPoints;
+                //         }
+                //     }
+                // }
 
                 $totalPoints = $statusPoints + $totalArtifactsPoints + $gold + $tokens + $cards;
 
@@ -235,6 +245,9 @@ class GameService
         $game = Game::create([]);
         return new GamesListDTO($game->id, $game->created_at, $game->winner, null,);
     }
+
+
+    // private function calculateArifatsPoints(): int {}
 
     //Summary of createResultData
     private function createResultData($gameData): array
