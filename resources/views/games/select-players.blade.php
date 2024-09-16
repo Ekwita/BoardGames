@@ -36,7 +36,7 @@
                             {{ $i }}</label>
                         <select name="player{{ $i }}" id="player{{ $i }}"
                             class="w-full mt-2 p-2 border border-gray-300 rounded-md">
-                            @foreach ($players as $player)
+                            @foreach ($players->players as $player)
                                 <option value="{{ $player->player_name }}">{{ $player->player_name }}</option>
                             @endforeach
                             <option selected="selected" value="">none</option>

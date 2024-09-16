@@ -64,6 +64,4 @@ class StatisticsService
         return $data;
     }
 
-
-    // PRIVATE FUNCTIONS
 }
