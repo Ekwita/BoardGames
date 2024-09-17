@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\PointsCalculatorInterface;
-use App\Models\Player;
 use App\Services\GameService;
 use App\Services\PointsCalculatorService;
 use App\Services\StatisticsService;

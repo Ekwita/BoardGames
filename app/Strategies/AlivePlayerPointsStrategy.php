@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Services\Strategies;
+namespace App\Strategies;
 
+use App\Actions\PlayersResults\AlivePlayerResultCreate;
+use App\Actions\PlayersStats\AlivePlayerStatsUpdate;
 use App\Enums\ArtifactType;
-use App\Models\Player;
-use App\Models\Result;
 use Illuminate\Http\Request;
 
 class AlivePlayerPointsStrategy
 {
+    public function __construct(private AlivePlayerResultCreate $alivePlayerResultCreate, private AlivePlayerStatsUpdate $alivePlayerStatsUpdate) {}
     public function calculatePoints(Request $request, string $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact)
     {
         $statusPoints = ($status == 3) ? 20 : 0;
@@ -16,7 +17,7 @@ class AlivePlayerPointsStrategy
         $tokens = $request->input('tokens_' . $selectedPlayer);
         $cards = $request->input('cards_' . $selectedPlayer);
 
-        $totalArtifactsPoints = $this->calculateArifatsPoints($request, $selectedPlayer, $playerBestArtifact);
+        $totalArtifactsPoints = $this->calculateArifactsPoints($request, $selectedPlayer, $playerBestArtifact);
 
         $totalPoints = $statusPoints + $totalArtifactsPoints + $gold + $tokens + $cards;
 
@@ -40,22 +41,10 @@ class AlivePlayerPointsStrategy
             'total_points' => $totalPoints
         ];
 
-        Result::create($data);
 
-        $playerToUpdate = Player::where('player_name', $selectedPlayer);
-        $playerToUpdate->incrementEach([
-            'games' => 1,
-            'totalgold' => $data['gold'],
-            'art5' => $data['art5'] ? 1 : 0,
-            'art7' => $data['art7'] ? 1 : 0,
-            'art10' => $data['art10'] ? 1 : 0,
-            'art12' => $data['art12'] ? 1 : 0,
-            'art15' => $data['art15'] ? 1 : 0,
-            'art17' => $data['art17'] ? 1 : 0,
-            'art20' => $data['art20'] ? 1 : 0,
-            'art25' => $data['art25'] ? 1 : 0,
-            'art30' => $data['art30'] ? 1 : 0,
-        ]);
+        // Create PlayerResult
+        $this->alivePlayerResultCreate->handle($data);
+        $this->alivePlayerStatsUpdate->handle($data, $totalPoints);
 
         return [
             'totalPoints' => $totalPoints,
@@ -64,8 +53,9 @@ class AlivePlayerPointsStrategy
     }
 
 
+
     // Calculate points for artifacts
-    private function calculateArifatsPoints(Request $request, string $selectedPlayer, $playerBestArtifact): int
+    private function calculateArifactsPoints(Request $request, string $selectedPlayer, $playerBestArtifact): int
     {
         $totalArtifactsPoints = 0;
         foreach (ArtifactType::getAllArtifacts() as $artifactPoints) {

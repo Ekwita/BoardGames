@@ -3,13 +3,12 @@
 namespace App\Services;
 
 use App\DTOs\GamesListDTO;
-use App\Enums\ArtifactType;
 use App\Interfaces\PointsCalculatorInterface;
 use App\Models\Game;
 use App\Models\Player;
 use App\Models\Result;
-use App\Services\Strategies\AlivePlayerPointsStrategy;
-use App\Services\Strategies\DeadPlayerPointsStrategy;
+use App\Strategies\AlivePlayerPointsStrategy;
+use App\Strategies\DeadPlayerPointsStrategy;
 use Illuminate\Http\Request;
 
 class PointsCalculatorService implements PointsCalculatorInterface
@@ -50,9 +49,6 @@ class PointsCalculatorService implements PointsCalculatorInterface
                 $bestScore = $totalPoints;
                 $bestArticaft = $playerBestArtifact;
                 $bestPlayer = $selectedPlayer;
-            }
-            if ($totalPoints > Player::where('player_name', $selectedPlayer)->value('best')) {
-                Player::where('player_name', $selectedPlayer)->update(['best' => $totalPoints]);
             }
         }
         if ($bestPlayer != null) {
