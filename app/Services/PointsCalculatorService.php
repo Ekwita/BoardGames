@@ -41,11 +41,11 @@ class PointsCalculatorService implements PointsCalculatorInterface
             if ($status != 1) {
                 $pointsResult = $this->alivePlayerPointsStrategy->calculatePoints($request, $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact);
                 $totalPoints = $pointsResult['totalPoints'];
-                $playerBestArtifact = $pointsResult['bestArtifact'];
+                $playerBestArtifact = $pointsResult['playerBestArtifact'];
             } else {
                 $this->deadPlayerPointsStrategy->calculatePoints($selectedPlayer, $status, $gameData, $playerId);
             }
-            
+
             if ($totalPoints > $bestScore || $totalPoints == $bestScore && $playerBestArtifact > $bestArticaft) {
                 $bestScore = $totalPoints;
                 $bestArticaft = $playerBestArtifact;
