@@ -51,7 +51,10 @@ class StatisticsService
     //
     public function getLastGameStatistics(): array
     {
-        $data = [];
+        $data = [
+            'lastGame' => null,
+            'results' => null
+        ];
         $lastGame = Game::latest()->first();
         if ($lastGame !== null) {
             $gameId = $lastGame->id;
@@ -63,5 +66,4 @@ class StatisticsService
         }
         return $data;
     }
-
 }
