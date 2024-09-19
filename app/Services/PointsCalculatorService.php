@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Actions\SetWinner;
 use App\DTOs\GamesListDTO;
 use App\Interfaces\PointsCalculatorInterface;
 use App\Models\Game;
@@ -52,15 +53,14 @@ class PointsCalculatorService implements PointsCalculatorInterface
             }
         }
         if ($bestPlayer != null) {
-            Game::where('id', $gameData->id)->update(['winner' => $bestPlayer]);
-            Player::where('player_name', $bestPlayer)->increment('wins', 1);
+            app(SetWinner::class)->handle($gameData, $bestPlayer);
         }
 
 
         $resultData = $this->createResultData($gameData);
 
-
         $request->session()->flush();
+
         return $resultData;
     }
 
