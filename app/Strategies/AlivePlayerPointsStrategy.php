@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class AlivePlayerPointsStrategy
 {
-    public function __construct(private AlivePlayerResultCreate $alivePlayerResultCreate, private AlivePlayerStatsUpdate $alivePlayerStatsUpdate) {}
+    public function __construct(protected AlivePlayerResultCreate $alivePlayerResultCreate, protected AlivePlayerStatsUpdate $alivePlayerStatsUpdate) {}
     public function calculatePoints(Request $request, string $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact): array
     {
         $statusPoints = ($status == 3) ? 20 : 0;

@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class GameController extends Controller
 {
 
-    public function __construct(private GameService $gameService) {}
+    public function __construct(protected GameService $gameService) {}
 
     /**
      * Display a list of all games with statistics.

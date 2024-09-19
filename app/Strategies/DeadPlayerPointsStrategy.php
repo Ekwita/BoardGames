@@ -7,7 +7,7 @@ use App\Actions\PlayersStats\DeadPlayerStatsUpdate;
 
 class DeadPlayerPointsStrategy
 {
-    public function __construct(private DeadPlayerResultCreate $deadPlayerResultCreate, private DeadPlayerStatsUpdate $deadPlayerStatsUpdate) {}
+    public function __construct(protected DeadPlayerResultCreate $deadPlayerResultCreate, protected DeadPlayerStatsUpdate $deadPlayerStatsUpdate) {}
     public function calculatePoints(string $selectedPlayer, int $status, $gameData, int $playerId): void
     {
         $data = [

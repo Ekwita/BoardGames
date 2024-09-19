@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 class PointsCalculatorService implements PointsCalculatorInterface
 {
 
-    public function __construct(private AlivePlayerPointsStrategy $alivePlayerPointsStrategy, private DeadPlayerPointsStrategy $deadPlayerPointsStrategy) {}
+    public function __construct(protected AlivePlayerPointsStrategy $alivePlayerPointsStrategy, protected DeadPlayerPointsStrategy $deadPlayerPointsStrategy) {}
     /**
      * Calculate points for each player
      */
