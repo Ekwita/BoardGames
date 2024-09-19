@@ -36,8 +36,8 @@ class PointsCalculatorService implements PointsCalculatorInterface
 
             $status = $request->input('status_' . $selectedPlayer);
 
-            $playerBestArtifact = 0;
             $totalPoints = 0;
+            $playerBestArtifact = 0;
             if ($status != 1) {
                 $pointsResult = $this->alivePlayerPointsStrategy->calculatePoints($request, $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact);
                 $totalPoints = $pointsResult['totalPoints'];

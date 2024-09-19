@@ -10,16 +10,16 @@ use Illuminate\Http\Request;
 class AlivePlayerPointsStrategy
 {
     public function __construct(private AlivePlayerResultCreate $alivePlayerResultCreate, private AlivePlayerStatsUpdate $alivePlayerStatsUpdate) {}
-    public function calculatePoints(Request $request, string $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact)
+    public function calculatePoints(Request $request, string $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact): array
     {
         $statusPoints = ($status == 3) ? 20 : 0;
         $gold = ($request->input('gold_' . $selectedPlayer) != null) ? $request->input('gold_' . $selectedPlayer) : 0;
         $tokens = $request->input('tokens_' . $selectedPlayer);
         $cards = $request->input('cards_' . $selectedPlayer);
 
-        $totalArtifactsPoints = $this->calculateArifactsPoints($request, $selectedPlayer, $playerBestArtifact);
+        $artifactsData = $this->calculateArifactsPoints($request, $selectedPlayer, $playerBestArtifact);
 
-        $totalPoints = $statusPoints + $totalArtifactsPoints + $gold + $tokens + $cards;
+        $totalPoints = $statusPoints + $artifactsData['totalArtifactsPoints'] + $gold + $tokens + $cards;
 
         $data = [
             'game_id' => $gameData->id,
@@ -48,25 +48,30 @@ class AlivePlayerPointsStrategy
 
         return [
             'totalPoints' => $totalPoints,
-            'playerBestArtifact' => $playerBestArtifact
+            'playerBestArtifact' => $artifactsData['playerBestArtifact']
         ];
     }
 
 
 
     // Calculate points for artifacts
-    private function calculateArifactsPoints(Request $request, string $selectedPlayer, $playerBestArtifact): int
+    private function calculateArifactsPoints(Request $request, string $selectedPlayer, $playerBestArtifact): array
     {
+        $playerBestArtifact = 0;
         $totalArtifactsPoints = 0;
         foreach (ArtifactType::getAllArtifacts() as $artifactPoints) {
             if ($request->has('art' . $artifactPoints->value . '_' . $selectedPlayer)) {
                 $totalArtifactsPoints += $artifactPoints->value;
-                if ($artifactPoints > $playerBestArtifact) {
-                    $playerBestArtifact = $artifactPoints;
+                if ($artifactPoints->value > $playerBestArtifact) {
+                    $playerBestArtifact = $artifactPoints->value;
                 }
             }
         }
 
-        return $totalArtifactsPoints;
+        $artifactsData = [
+            'totalArtifactsPoints' => $totalArtifactsPoints,
+            'playerBestArtifact' => $playerBestArtifact
+        ];
+        return $artifactsData;
     }
 }
