@@ -4,11 +4,13 @@ namespace App\Strategies;
 
 use App\Actions\PlayersResults\DeadPlayerResultCreate;
 use App\Actions\PlayersStats\DeadPlayerStatsUpdate;
+use App\Interfaces\PlayerPointsCalculatorInterface;
+use Illuminate\Http\Request;
 
-class DeadPlayerPointsStrategy
+class DeadPlayerPointsStrategy implements PlayerPointsCalculatorInterface
 {
     public function __construct(protected DeadPlayerResultCreate $deadPlayerResultCreate, protected DeadPlayerStatsUpdate $deadPlayerStatsUpdate) {}
-    public function calculatePoints(string $selectedPlayer, int $status, $gameData, int $playerId): void
+    public function calculatePoints(Request $request, string $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact): array
     {
         $data = [
             'game_id' => $gameData->id,
@@ -20,5 +22,10 @@ class DeadPlayerPointsStrategy
 
         $this->deadPlayerResultCreate->handle($data);
         $this->deadPlayerStatsUpdate->handle($data);
+
+        return [
+            'totalPoints' => 0,
+            'playerBestArtifact' => null
+        ];
     }
 }
