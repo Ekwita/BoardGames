@@ -7,13 +7,10 @@ use App\DTOs\GamesListDTO;
 use App\Interfaces\PlayerPointsCalculatorInterface;
 use App\Interfaces\PointsCalculatorInterface;
 use App\Models\Game;
-use App\Models\Player;
 use App\Models\Result;
-use App\Strategies\AlivePlayerPointsStrategy;
-use App\Strategies\DeadPlayerPointsStrategy;
 use Illuminate\Http\Request;
 
-class PointsCalculatorService
+class PointsCalculatorService implements PointsCalculatorInterface
 {
     /**
      * Calculate points for each player
@@ -35,15 +32,11 @@ class PointsCalculatorService
 
             $status = $request->input('status_' . $selectedPlayer);
 
-            // dd($status);
-
             $totalPoints = 0;
             $playerBestArtifact = 0;
 
             $pointsCalculator = app()->make(PlayerPointsCalculatorInterface::class, ['type' => $status]);
             $pointsResult = $pointsCalculator->calculatePoints($request, $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact);
-
-            // dd($pointsResult);
 
             $totalPoints = $pointsResult['totalPoints'];
             $playerBestArtifact = $pointsResult['playerBestArtifact'];
@@ -60,17 +53,17 @@ class PointsCalculatorService
         }
 
 
-        $resultData = $this->createResultData($gameData);
+        $resultData = $this->getGameResultFromDatabase($gameData);
 
         $request->session()->flush();
 
         return $resultData;
     }
 
-    //PRIVATE FUNCTIONS
+    //PRIVATE METHODS
 
     //Summary of createResultData
-    private function createResultData($gameData): array
+    private function getGameResultFromDatabase($gameData): array
     {
         $results = Result::where('game_id', $gameData->id)
             ->orderByDesc('total_points')

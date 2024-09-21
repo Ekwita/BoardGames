@@ -6,7 +6,11 @@ use App\Actions\PlayersResults\AlivePlayerResultCreate;
 use App\Actions\PlayersResults\DeadPlayerResultCreate;
 use App\Actions\PlayersStats\AlivePlayerStatsUpdate;
 use App\Actions\PlayersStats\DeadPlayerStatsUpdate;
+use App\Interfaces\GameInterface;
 use App\Interfaces\PlayerPointsCalculatorInterface;
+use App\Interfaces\PointsCalculatorInterface;
+use App\Services\GameService;
+use App\Services\PointsCalculatorService;
 use App\Strategies\AlivePlayerPointsStrategy;
 use App\Strategies\DeadPlayerPointsStrategy;
 use Exception;
@@ -24,15 +28,11 @@ class AppServiceProvider extends ServiceProvider
             $alivePlayerStatsUpdate = new AlivePlayerStatsUpdate;
             $deadPlayerResultCreate = new DeadPlayerResultCreate;
             $deadPlayerStatsUpdate = new DeadPlayerStatsUpdate;
-            switch ($params['type']) {
-                case 2:
-                    return new AlivePlayerPointsStrategy($alivePlayerResultCreate,  $alivePlayerStatsUpdate);
-                case 3:
-                    return new AlivePlayerPointsStrategy($alivePlayerResultCreate,  $alivePlayerStatsUpdate);
-                case 1:
-                    return new DeadPlayerPointsStrategy($deadPlayerResultCreate, $deadPlayerStatsUpdate);
-                default:
-                    throw new Exception('Unknown status value');
+
+            if ($params['type'] == 1) {
+                return new DeadPlayerPointsStrategy($deadPlayerResultCreate, $deadPlayerStatsUpdate);
+            } else {
+                return new AlivePlayerPointsStrategy($alivePlayerResultCreate,  $alivePlayerStatsUpdate);
             }
         });
     }
@@ -42,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->bind(PointsCalculatorInterface::class, PointsCalculatorService::class);
+        $this->app->bind(GameInterface::class, GameService::class);
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 class DeadPlayerPointsStrategy implements PlayerPointsCalculatorInterface
 {
     public function __construct(protected DeadPlayerResultCreate $deadPlayerResultCreate, protected DeadPlayerStatsUpdate $deadPlayerStatsUpdate) {}
+    
     public function calculatePoints(Request $request, string $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact): array
     {
         $data = [
