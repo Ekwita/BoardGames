@@ -11,7 +11,7 @@ use Illuminate\View\View;
 class PlayerController extends Controller
 {
 
-    public function __construct(private PlayerService $playerService) {}
+    public function __construct(protected PlayerService $playerService) {}
 
     /**
      * Display a listing of the players.

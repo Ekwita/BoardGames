@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\GameService;
-use App\Services\PointsCalculatorService;
+use App\Interfaces\GameInterface;
+use App\Interfaces\PointsCalculatorInterface;
 use App\Services\StatisticsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class GameController extends Controller
 {
 
-    public function __construct(private GameService $gameService) {}
+    public function __construct(protected GameInterface $gameService) {}
 
     /**
      * Display a list of all games with statistics.
@@ -60,14 +60,10 @@ class GameController extends Controller
     /**
      * Calculate player points and show the result.
      */
-    public function pointsCalculate(Request $request, PointsCalculatorService $pointsCalculatorService): View
+    public function pointsCalculate(Request $request, PointsCalculatorInterface $pointsCalculator): View
     {
         // Calculate points for each player
-        $resultData = $pointsCalculatorService->pointsCalculator($request);
-
-        // Create new game in database
-
-        // Update players statistics
+        $resultData = $pointsCalculator->pointsCalculator($request);
 
         // Display results
         return view('games.result', ['results' => $resultData['results'], 'winner' => $resultData['winner']]);
