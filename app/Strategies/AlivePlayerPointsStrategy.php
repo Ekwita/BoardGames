@@ -5,11 +5,12 @@ namespace App\Strategies;
 use App\Actions\PlayersResults\AlivePlayerResultCreate;
 use App\Actions\PlayersStats\AlivePlayerStatsUpdate;
 use App\Enums\ArtifactType;
+use App\Interfaces\PlayerPointsCalculatorInterface;
 use Illuminate\Http\Request;
 
-class AlivePlayerPointsStrategy
+class AlivePlayerPointsStrategy implements PlayerPointsCalculatorInterface
 {
-    public function __construct(private AlivePlayerResultCreate $alivePlayerResultCreate, private AlivePlayerStatsUpdate $alivePlayerStatsUpdate) {}
+    public function __construct(protected AlivePlayerResultCreate $alivePlayerResultCreate, protected AlivePlayerStatsUpdate $alivePlayerStatsUpdate) {}
     public function calculatePoints(Request $request, string $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact): array
     {
         $statusPoints = ($status == 3) ? 20 : 0;

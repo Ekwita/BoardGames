@@ -6,5 +6,5 @@ use Illuminate\Http\Request;
 
 interface PointsCalculatorInterface
 {
-    public function pointsCalculator(Request $request);
+    public function pointsCalculator(Request $request): array;
 }

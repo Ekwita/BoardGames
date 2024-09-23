@@ -4,18 +4,14 @@ namespace App\Services;
 
 use App\Actions\SetWinner;
 use App\DTOs\GamesListDTO;
+use App\Interfaces\PlayerPointsCalculatorInterface;
 use App\Interfaces\PointsCalculatorInterface;
 use App\Models\Game;
-use App\Models\Player;
 use App\Models\Result;
-use App\Strategies\AlivePlayerPointsStrategy;
-use App\Strategies\DeadPlayerPointsStrategy;
 use Illuminate\Http\Request;
 
 class PointsCalculatorService implements PointsCalculatorInterface
 {
-
-    public function __construct(private AlivePlayerPointsStrategy $alivePlayerPointsStrategy, private DeadPlayerPointsStrategy $deadPlayerPointsStrategy) {}
     /**
      * Calculate points for each player
      */
@@ -38,13 +34,13 @@ class PointsCalculatorService implements PointsCalculatorInterface
 
             $totalPoints = 0;
             $playerBestArtifact = 0;
-            if ($status != 1) {
-                $pointsResult = $this->alivePlayerPointsStrategy->calculatePoints($request, $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact);
-                $totalPoints = $pointsResult['totalPoints'];
-                $playerBestArtifact = $pointsResult['playerBestArtifact'];
-            } else {
-                $this->deadPlayerPointsStrategy->calculatePoints($selectedPlayer, $status, $gameData, $playerId);
-            }
+
+            $pointsCalculator = app()->make(PlayerPointsCalculatorInterface::class, ['type' => $status]);
+            $pointsResult = $pointsCalculator->calculatePoints($request, $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact);
+
+            $totalPoints = $pointsResult['totalPoints'];
+            $playerBestArtifact = $pointsResult['playerBestArtifact'];
+
 
             if ($totalPoints > $bestScore || $totalPoints == $bestScore && $playerBestArtifact > $bestArticaft) {
                 $bestScore = $totalPoints;
@@ -57,17 +53,17 @@ class PointsCalculatorService implements PointsCalculatorInterface
         }
 
 
-        $resultData = $this->createResultData($gameData);
+        $resultData = $this->getGameResultFromDatabase($gameData);
 
         $request->session()->flush();
 
         return $resultData;
     }
 
-    //PRIVATE FUNCTIONS
+    //PRIVATE METHODS
 
     //Summary of createResultData
-    private function createResultData($gameData): array
+    private function getGameResultFromDatabase($gameData): array
     {
         $results = Result::where('game_id', $gameData->id)
             ->orderByDesc('total_points')
