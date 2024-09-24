@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Actions\SetWinner;
 use App\DTOs\GamesListDTO;
+use App\DTOs\PlayerGameDataDTO;
 use App\Interfaces\PlayerPointsCalculatorInterface;
 use App\Interfaces\PointsCalculatorInterface;
 use App\Models\Game;
@@ -35,8 +36,11 @@ class PointsCalculatorService implements PointsCalculatorInterface
             $totalPoints = 0;
             $playerBestArtifact = 0;
 
+
+            $playerGameDataDto = new PlayerGameDataDTO($request, $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact);
+
             $pointsCalculator = app()->make(PlayerPointsCalculatorInterface::class, ['type' => $status]);
-            $pointsResult = $pointsCalculator->calculatePoints($request, $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact);
+            $pointsResult = $pointsCalculator->calculatePoints($playerGameDataDto);
 
             $totalPoints = $pointsResult['totalPoints'];
             $playerBestArtifact = $pointsResult['playerBestArtifact'];
