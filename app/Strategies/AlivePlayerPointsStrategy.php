@@ -12,9 +12,11 @@ use Illuminate\Http\Request;
 class AlivePlayerPointsStrategy implements PlayerPointsCalculatorInterface
 {
     public function __construct(protected AlivePlayerResultCreate $alivePlayerResultCreate, protected AlivePlayerStatsUpdate $alivePlayerStatsUpdate) {}
+
     public function calculatePoints(PlayerGameDataDTO $playerGameDataDTO): array
     {
-        $statusPoints = ($playerGameDataDTO->status == 3) ? 20 : 0;
+        $statusPoints = $this->calculateStatusPoints($playerGameDataDTO->status);
+
         $gold = ($playerGameDataDTO->request->input('gold_' . $playerGameDataDTO->selectedPlayer) != null) ? $playerGameDataDTO->request->input('gold_' . $playerGameDataDTO->selectedPlayer) : 0;
         $tokens = $playerGameDataDTO->request->input('tokens_' . $playerGameDataDTO->selectedPlayer);
         $cards = $playerGameDataDTO->request->input('cards_' . $playerGameDataDTO->selectedPlayer);
@@ -23,7 +25,29 @@ class AlivePlayerPointsStrategy implements PlayerPointsCalculatorInterface
 
         $totalPoints = $statusPoints + $artifactsData['totalArtifactsPoints'] + $gold + $tokens + $cards;
 
-        $data = [
+        $data = $this->prepateData($playerGameDataDTO, $gold, $tokens, $cards, $totalPoints);
+
+
+        // Create PlayerResult
+        $this->alivePlayerResultCreate->handle($data);
+        $this->alivePlayerStatsUpdate->handle($data, $totalPoints);
+
+        return [
+            'totalPoints' => $totalPoints,
+            'playerBestArtifact' => $artifactsData['playerBestArtifact']
+        ];
+    }
+
+
+    //PRIVATE METHODS
+
+    private function calculateStatusPoints(int $status): int
+    {
+        return ($status == 3) ? 20 : 0;
+    }
+    private function prepateData(PlayerGameDataDTO $playerGameDataDTO, int $gold, int $tokens, int $cards, int $totalPoints): array
+    {
+        return [
             'game_id' => $playerGameDataDTO->gameData->id,
             'player_id' => $playerGameDataDTO->playerId,
             'player_name' => $playerGameDataDTO->selectedPlayer,
@@ -42,20 +66,7 @@ class AlivePlayerPointsStrategy implements PlayerPointsCalculatorInterface
             'cards' => $cards,
             'total_points' => $totalPoints
         ];
-
-
-        // Create PlayerResult
-        $this->alivePlayerResultCreate->handle($data);
-        $this->alivePlayerStatsUpdate->handle($data, $totalPoints);
-
-        return [
-            'totalPoints' => $totalPoints,
-            'playerBestArtifact' => $artifactsData['playerBestArtifact']
-        ];
     }
-
-
-
     // Calculate points for artifacts
     private function calculateArifactsPoints(Request $request, string $selectedPlayer, $playerBestArtifact): array
     {

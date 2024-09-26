@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTOs;
+namespace App\DTOs\NewGameParams;
 
 class OnePlayerResultDTO
 {
@@ -22,5 +22,4 @@ class OnePlayerResultDTO
         public ?int $cards = null,
         public ?int $totalPoints = null,
     ) {}
-
 }

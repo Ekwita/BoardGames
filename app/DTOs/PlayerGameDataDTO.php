@@ -2,6 +2,7 @@
 
 namespace App\DTOs;
 
+use App\DTOs\NewGameParams\GameDataDTO;
 use Illuminate\Http\Request;
 
 class PlayerGameDataDTO
