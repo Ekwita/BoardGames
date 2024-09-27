@@ -6,7 +6,6 @@ use App\Actions\PlayersResults\AlivePlayerResultCreate;
 use App\Actions\PlayersResults\DeadPlayerResultCreate;
 use App\Actions\PlayersStats\AlivePlayerStatsUpdate;
 use App\Actions\PlayersStats\DeadPlayerStatsUpdate;
-use App\Http\Controllers\GamePointsController;
 use App\Interfaces\GameInterface;
 use App\Interfaces\GameResultProviderInterface;
 use App\Interfaces\PlayerPointsCalculatorInterface;

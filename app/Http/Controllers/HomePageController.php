@@ -17,7 +17,7 @@ class HomePageController extends Controller
         session()->flush();
         $data = $statisticsService->getLastGameStatistics();
 
-        return view('welcome', [
+        return view('main', [
             'results' => $data['results'],
             'game' => $data['lastGame']
         ]);
