@@ -31,8 +31,7 @@ class PlayerPointsService implements PlayerPointsServiceInterface
 
             $playerGameDataDto = new PlayerGameDataDTO($request, $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact);
 
-            $pointsCalculator = app()->make(PlayerPointsCalculatorInterface::class, ['type' => $status]);
-            $pointsResult = $pointsCalculator->calculatePoints($playerGameDataDto);
+            $pointsResult = app()->make(PlayerPointsCalculatorInterface::class, ['type' => $status])->calculatePoints($playerGameDataDto);
 
             $totalPoints = $pointsResult['totalPoints'];
             $playerBestArtifact = $pointsResult['playerBestArtifact'];
