@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\AllPlayersListDTO;
-use App\DTOs\GameDataDTO;
+use App\DTOs\NewGameParams\GameDataDTO;
 use App\Factories\GameFactory;
 use App\Factories\OnePlayerResultFactory;
 use App\Factories\PlayersListFactory;

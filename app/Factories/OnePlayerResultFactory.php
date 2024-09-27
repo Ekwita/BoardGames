@@ -2,7 +2,7 @@
 
 namespace App\Factories;
 
-use App\DTOs\OnePlayerResultDTO;
+use App\DTOs\NewGameParams\OnePlayerResultDTO;
 
 class OnePlayerResultFactory
 {

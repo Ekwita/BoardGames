@@ -2,8 +2,8 @@
 
 namespace App\Factories;
 
-use App\DTOs\AllPlayersResultsDTO;
-use App\DTOs\GameDataDTO;
+use App\DTOs\NewGameParams\AllPlayersResultsDTO;
+use App\DTOs\NewGameParams\GameDataDTO;
 use Illuminate\Support\Collection;
 
 class GameFactory

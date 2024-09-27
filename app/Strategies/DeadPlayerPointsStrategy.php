@@ -4,20 +4,20 @@ namespace App\Strategies;
 
 use App\Actions\PlayersResults\DeadPlayerResultCreate;
 use App\Actions\PlayersStats\DeadPlayerStatsUpdate;
+use App\DTOs\PlayerGameDataDTO;
 use App\Interfaces\PlayerPointsCalculatorInterface;
-use Illuminate\Http\Request;
 
 class DeadPlayerPointsStrategy implements PlayerPointsCalculatorInterface
 {
     public function __construct(protected DeadPlayerResultCreate $deadPlayerResultCreate, protected DeadPlayerStatsUpdate $deadPlayerStatsUpdate) {}
     
-    public function calculatePoints(Request $request, string $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact): array
+    public function calculatePoints(PlayerGameDataDTO $playerGameDataDTO): array
     {
         $data = [
-            'game_id' => $gameData->id,
-            'player_id' => $playerId,
-            'player_name' => $selectedPlayer,
-            'status' => $status,
+            'game_id' => $playerGameDataDTO->gameData->id,
+            'player_id' => $playerGameDataDTO->playerId,
+            'player_name' => $playerGameDataDTO->selectedPlayer,
+            'status' => $playerGameDataDTO->status,
             'total_points' => 0
         ];
 
