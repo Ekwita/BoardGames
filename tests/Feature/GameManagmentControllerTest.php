@@ -87,8 +87,8 @@ class GameManagmentControllerTest extends TestCase
         $response = $this->get(route('games.pointsForm'));
 
         $response->assertStatus(200);
-
-           $response->assertViewHas('players', function ($playersInView) use ($players) {
+        $response->assertViewIs('games.points');
+        $response->assertViewHas('players', function ($playersInView) use ($players) {
             if ($playersInView->count() !== $players->count()) {
                 return false;
             }
