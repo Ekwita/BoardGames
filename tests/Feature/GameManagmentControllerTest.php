@@ -5,11 +5,8 @@ namespace Tests\Feature;
 use App\DTOs\NewGameParams\AllPlayersResultsDTO;
 use App\DTOs\NewGameParams\GameDataDTO;
 use App\DTOs\NewGameParams\OnePlayerResultDTO;
-use App\Models\Game;
 use App\Models\Player;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class GameManagmentControllerTest extends TestCase
