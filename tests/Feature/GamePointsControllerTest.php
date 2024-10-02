@@ -14,8 +14,6 @@ use App\Services\GameResultService;
 use App\Services\PlayerPointsService;
 use App\Services\PointsCalculatorService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Request;
 use Tests\TestCase;
 
 class GamePointsControllerTest extends TestCase
