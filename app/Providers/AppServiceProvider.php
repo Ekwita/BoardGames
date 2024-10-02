@@ -6,7 +6,6 @@ use App\Actions\PlayersResults\AlivePlayerResultCreate;
 use App\Actions\PlayersResults\DeadPlayerResultCreate;
 use App\Actions\PlayersStats\AlivePlayerStatsUpdate;
 use App\Actions\PlayersStats\DeadPlayerStatsUpdate;
-use App\Http\Controllers\GamePointsController;
 use App\Interfaces\GameInterface;
 use App\Interfaces\GameResultProviderInterface;
 use App\Interfaces\PlayerPointsCalculatorInterface;
@@ -19,6 +18,7 @@ use App\Services\PointsCalculatorService;
 use App\Strategies\AlivePlayerPointsStrategy;
 use App\Strategies\DeadPlayerPointsStrategy;
 use Exception;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -51,5 +51,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(GameInterface::class, GameService::class);
         $this->app->bind(GameResultProviderInterface::class, GameResultService::class);
         $this->app->bind(PlayerPointsServiceInterface::class, PlayerPointsService::class);
+        Vite::prefetch(concurrency: 3);
     }
 }
