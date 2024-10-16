@@ -33,30 +33,27 @@ const statusText = (status) => {
 
 <template>
     <div>
-        <h1>Winner: {{ winner }}</h1>
-        <div class="grid grid-cols-4">
-            <div v-for="result in results" :key="result.id">
-                <label>
-                    <strong>Name: {{ result.player_name }}</strong>
-                </label><br />
-                <label>Status: {{ statusText(result.status) }}</label><br />
+        <h1 class="text-gray-300 font-bold">Winner: {{ winner }}</h1>
+        <div class="grid grid-cols-4 gap-4">
+            <div v-for="result in results" :key="result.id" class="p-4 bg-gray-800 text-gray-300 rounded-md">
+                <label class="font-bold">Name: {{ result.player_name }}</label><br>
+                <label>Status: {{ statusText(result.status) }}</label><br>
 
                 <template v-if="result.status !== 1">
-                    <label>Artifacts:</label><br />
-                    <template v-for="point in points" :key="point">
-                        <template v-if="result[`art${point}`] !== 0">
-                            {{ point }} points <br />
+                    <label>Artifacts:<br>
+                        <template v-for="point in points" :key="point">
+                            <span v-if="result[`art${point}`] !== 0">{{ point }} points<br></span>
                         </template>
-                    </template>
-
-                    <label>Gold: {{ result.gold }}</label><br />
-                    <label>Tokens: {{ result.tokens }}</label><br />
-                    <label>Cards: {{ result.cards }}</label><br />
-                    <label>Total: {{ result.total_points }}</label><br />
+                    </label>
+                    <label>Gold: {{ result.gold }}</label><br>
+                    <label>Tokens: {{ result.tokens }}</label><br>
+                    <label>Cards: {{ result.cards }}</label><br>
+                    <label>Total: {{ result.total_points }}</label><br>
                 </template>
             </div>
         </div>
-        <br />
-        <Link :href="route('base')"><button>End</button></Link>
+        <Link :href="route('base')">
+        <button class="bg-gray-800 text-gray-300 rounded-md py-2 mt-4 hover:bg-gray-700">End</button>
+        </Link>
     </div>
 </template>
