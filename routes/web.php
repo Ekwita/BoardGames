@@ -6,7 +6,6 @@ use App\Http\Controllers\GameStatisticsController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 

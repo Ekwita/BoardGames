@@ -18,7 +18,5 @@ class GameStatisticsController extends Controller
         $games = $this->statisticsService->getGamesList();
 
         return Inertia::render('Games/List', ['games' => $games['games']]);
-
-        // return view('games.list', ['games' => $games['games']]);
     }
 }

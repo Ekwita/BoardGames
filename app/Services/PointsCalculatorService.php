@@ -25,7 +25,7 @@ class PointsCalculatorService implements PointsCalculatorInterface
     {
         $gameData = session()->get('gameData');
         $selectedPlayers = $gameData->allPlayersResults->playersResults;
-        // dd($selectedPlayers);
+
         //Create new game in database
         GameFactory::create($request);
 
@@ -40,7 +40,7 @@ class PointsCalculatorService implements PointsCalculatorInterface
         //Get saved game result
         $resultData = $this->gameResultProvider->getGameResult($gameData);
 
-        $request->session()->flush();
+        session()->forget('gameData');
 
         return $resultData;
     }

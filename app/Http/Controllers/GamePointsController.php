@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Interfaces\PointsCalculatorInterface;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,7 +25,6 @@ class GamePointsController extends Controller
             'results' => $resultData['results'],
             'winner' => $resultData['winner']
         ]);
-        // Display results
-        // return view('games.result', ['results' => $resultData['results'], 'winner' => $resultData['winner']]);
+
     }
 }
