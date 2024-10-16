@@ -35,17 +35,13 @@ const artifactNumbers = [5, 7, 10, 12, 15, 17, 20, 25, 30];
 <template>
     <div>
         <div v-if="games && games.length > 0">
-            <div v-for="game in games" :key="game.gameId">
-                <label><strong>Winner: {{ game.winner }}</strong></label>
-                <div class="results grid grid-cols-4 gap-4">
-                    <div v-for="statistic in game.statistics" :key="statistic.player_id" class="player">
-                        <div>
-                            <label>
-                                <strong>
-                                    Name: <a :href="route('players.show', { player: statistic.player_id })">{{
-                                        statistic.player_name.toUpperCase() }}</a>
-                                </strong>
-                            </label>
+            <div v-for="game in games" :key="game.gameId" class="mb-4">
+                <label class="text-gray-300 font-bold">Winner: {{ game.winner }}</label>
+                <div class="results grid grid-cols-4 gap-4 bg-gray-800 p-4 rounded-md">
+                    <div v-for="statistic in game.statistics" :key="statistic.player_id" class="player text-gray-300">
+                        <div class="font-bold">
+                            <label>Name: <a :href="route('players.show', { player: statistic.player_id })"
+                                    class="hover:underline">{{ statistic.player_name.toUpperCase() }}</a></label>
                         </div>
                         <div class="status">
                             <label>Status: {{ statusText(statistic.status) }}</label>
@@ -75,36 +71,29 @@ const artifactNumbers = [5, 7, 10, 12, 15, 17, 20, 25, 30];
                         </div>
                     </div>
                 </div>
-                <strong><label>Date: {{ game.createdAt }}</label></strong>
+                <label class="text-gray-300 font-bold">Date: {{ game.createdAt }}</label>
             </div>
-            <div>
-                <Link :href="route('base')"><button>Home</button></Link>
+            <div class="mt-4">
+                <Link :href="route('base')">
+                <button class="rounded bg-gray-800 text-gray-300 py-2 px-4 hover:bg-gray-700">Home</button>
+                </Link>
             </div>
             <div class="paginate flex justify-center mt-4">
-                <div class="inline-block">
-                    <div class="pagination">
-                        <!-- Previous Link -->
-                        <Link v-if="props.games.prev_page_url" :href="props.games.prev_page_url" class="prev">
-                        Previous
-                        </Link>
-
-                        <!-- Current Page Number -->
-                        <span class="current">
-                            Page {{ props.games.current_page }}
-                        </span>
-
-                        <!-- Next Link -->
-                        <Link v-if="props.games.next_page_url" :href="props.games.next_page_url" class="next">
-                        Next
-                        </Link>
-                    </div>
+                <div class="pagination flex items-center space-x-4">
+                    <Link v-if="props.games.prev_page_url" :href="props.games.prev_page_url"
+                        class="prev text-gray-300 hover:text-white">
+                    Previous
+                    </Link>
+                    <span class="current text-gray-300">Page {{ props.games.current_page }}</span>
+                    <Link v-if="props.games.next_page_url" :href="props.games.next_page_url"
+                        class="next text-gray-300 hover:text-white">
+                    Next
+                    </Link>
                 </div>
             </div>
         </div>
-        <div v-else>
-            <div class="results">
-                <h3>You have no games yet.</h3>
-            </div>
+        <div v-else class="results text-gray-300">
+            <h3>You have no games yet.</h3>
         </div>
     </div>
 </template>

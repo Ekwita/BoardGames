@@ -112,7 +112,7 @@ function submitForm() {
     <form :action="actionUrl" method="post" @submit.prevent="submitForm">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <input type="hidden" name="_token" :value="csrfToken">
-            <div v-for="player in players" :key="player" class="player_points bg-gray-800 text-gray-200 p-4 rounded-md">
+            <div v-for="player in players" :key="player" class="player_points bg-gray-800 text-gray-300 p-4 rounded-md">
                 <div v-if="playerData[player]">
                     <div class="bg-gray-900 p-2 mb-3 rounded">
                         <span class="font-semibold">Name: {{ player }}</span>
@@ -124,7 +124,7 @@ function submitForm() {
                     <div class="mb-3">
                         <label :for="'status_' + player" class="block mb-1">Status</label>
                         <select :name="'status_' + player" :id="'status_' + player" v-model="playerData[player].status"
-                            class="w-full p-2 bg-gray-600 text-gray-200 rounded" required>
+                            class="w-full p-2 bg-gray-600 text-gray-300 rounded" required>
                             <option value="" disabled>Select a status</option>
                             <option value="3">Escape</option>
                             <option value="2">Alive</option>
@@ -138,7 +138,7 @@ function submitForm() {
                                 <input type="checkbox" :id="'art5_' + player" :name="'art5_' + player" class="mb-2"
                                     v-model="playerData[player].artifacts.art5">
                                 <label :for="'art7_' + player" class="block mb-1">Artifact - 7 points</label>
-                                <input type="checkbox" :id="'art7_' + player" :name="'art7_' + player" class="mb-2"
+                                <input type="checkbox" :id="'art5_' + player" :name="'art7_' + player" class="mb-2"
                                     v-model="playerData[player].artifacts.art7">
                                 <label :for="'art10_' + player" class="block mb-1">Artifact - 10 points</label>
                                 <input type="checkbox" :id="'art10_' + player" :name="'art10_' + player" class="mb-2"
@@ -161,40 +161,39 @@ function submitForm() {
                                 <label :for="'art30_' + player" class="block mb-1">Artifact - 30 points</label>
                                 <input type="checkbox" :id="'art30_' + player" :name="'art30_' + player" class="mb-2"
                                     v-model="playerData[player].artifacts.art30">
+
+
                             </div>
                         </div>
                         <div v-if="playerData[player].hasAnyTrueArtifact">
                             <div class="mb-3 gold">
                                 <label :for="'gold_' + player" class="block mb-1">Gold: </label>
                                 <input type="number" :id="'gold_' + player" :name="'gold_' + player"
-                                    v-model="playerData[player].gold" min="0" max="600"
-                                    class="w-full p-2 bg-gray-600 text-gray-200 rounded">
+                                    v-model="playerData[player].gold"
+                                    class="w-full p-2 bg-gray-600 text-gray-300 rounded">
                             </div>
-                            <div v-if="playerData[player].gold !== null">
-                                <div class="mb-3 tokens">
-                                    <label :for="'tokens_' + player" class="block mb-1">Tokens: </label>
-                                    <input type="number" :id="'tokens_' + player" :name="'tokens_' + player"
-                                        v-model="playerData[player].tokens" min="0" max="600"
-                                        class="w-full p-2 bg-gray-600 text-gray-200 rounded">
-                                </div>
-                                <div v-if="playerData[player].tokens !== null">
-                                    <div class="mb-3 cards">
-                                        <label :for="'cards_' + player" class="block mb-1">Cards: </label>
-                                        <input type="number" :id="'cards_' + player" :name="'cards_' + player"
-                                            v-model="playerData[player].cards" min="0" max="600"
-                                            class="w-full p-2 bg-gray-600 text-gray-200 rounded">
-                                    </div>
-                                </div>
+                            <div class="mb-3 tokens">
+                                <label :for="'tokens_' + player" class="block mb-1">Tokens: </label>
+                                <input type="number" :id="'tokens_' + player" :name="'tokens_' + player"
+                                    v-model="playerData[player].tokens"
+                                    class="w-full p-2 bg-gray-600 text-gray-300 rounded">
+                            </div>
+                            <div class="mb-3 cards">
+                                <label :for="'cards_' + player" class="block mb-1">Cards: </label>
+                                <input type="number" :id="'cards_' + player" :name="'cards_' + player"
+                                    v-model="playerData[player].cards"
+                                    class="w-full p-2 bg-gray-600 text-gray-300 rounded">
                             </div>
                         </div>
                     </div>
-                    <div v-if="playerData[player].status == 1">
+                    <div v-if="playerData[player].status == 1" class="text-red-500">
                         You are dead!
                     </div>
                 </div>
             </div>
         </div>
-        <button type="submit" class="bg-gray-800 text-gray-200 rounded-md p-2 mt-4">Confirm</button>
+        <button type="submit" class="bg-gray-800 text-gray-300 rounded-md py-2 mt-4 hover:bg-gray-700">Confirm</button>
+        <Link :href="route('base')"><button
+            class="bg-gray-800 text-gray-300 rounded-md py-2 mt-4 hover:bg-gray-700">Home</button></Link>
     </form>
-    <Link :href="route('base')"><button class="bg-gray-800 text-gray-200 rounded-md p-2 mt-4">Home</button></Link>
 </template>

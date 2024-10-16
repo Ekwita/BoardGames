@@ -8,6 +8,8 @@ use App\Services\PlayerService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class PlayerController extends Controller
 {
@@ -17,10 +19,13 @@ class PlayerController extends Controller
     /**
      * Display a listing of the players.
      */
-    public function index(): View
+    public function index(): Response
     {
         $players = $this->playerService->getAllPlayers();
-        return view('players.list', ['players' => $players]);
+
+        return Inertia::render('Players/List', ['players' => $players]);
+
+        // return view('players.list', ['players' => $players]);
     }
 
     /**
@@ -35,15 +40,17 @@ class PlayerController extends Controller
             player_name: $request->input('player_name')
         );
         $this->playerService->createPlayer($playerDTO);
-        return back();
+
+        return to_route('players.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(int $id): Response
     {
         $playerDTO = $this->playerService->getPlayerById($id);
-        return view('players.statistic', ['player' => $playerDTO]);
+
+        return Inertia::render('Players/Statistic', ['player' => $playerDTO]);
     }
 }
