@@ -2,15 +2,17 @@
 
 namespace App\Factories;
 
-use App\DTOs\NewGameParams\AllPlayersResultsDTO;
-use App\DTOs\NewGameParams\GameDataDTO;
-use Illuminate\Support\Collection;
+use App\Models\Game;
+use Illuminate\Http\Request;
 
 class GameFactory
 {
-    public static function createGameData(int $gameId, Collection $playersResults): GameDataDTO
+    public static function create(Request $request): void
     {
-        $allPlayersResults = new AllPlayersResultsDTO($playersResults);
-        return new GameDataDTO($gameId, $allPlayersResults);
+        $user = $request->user();
+
+        Game::create([
+            'user_id' => $user->id
+        ]);
     }
 }

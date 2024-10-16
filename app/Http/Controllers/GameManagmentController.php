@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Interfaces\GameInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class GameManagmentController extends Controller
 {
@@ -13,13 +14,14 @@ class GameManagmentController extends Controller
     public function __construct(protected GameInterface $gameService) {}
 
     /**
-     * Show the form for creating a new game.
+     * Show the form for creating a new game - players select form.
      */
-    public function startNewGame(): View
+    public function startNewGame(): Response
     {
         $players = $this->gameService->getPlayersList();
-
-        return view('games.select-players', ['players' => $players]);
+        return Inertia::render('Games/SelectPlayers', [
+            'players' => $players
+        ]);
     }
 
     /**
@@ -39,10 +41,14 @@ class GameManagmentController extends Controller
     /**
      * 
      */
-    public function pointsForm(): View
+    public function pointsForm(): Response
     {
         $players = $this->gameService->getPlayersListFromSession();
-        return view('games.points', ['players' => $players]);
-    }
 
+        return Inertia::render('Games/PointsCalculator', [
+            'players' => $players,
+            'csrfToken' => csrf_token(),
+            'actionUrl' => route('games.pointsCalculate')
+        ]);
+    }
 }

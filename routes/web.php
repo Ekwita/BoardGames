@@ -10,14 +10,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+/**
+ * Home page
+ */
+Route::get('/', [HomePageController::class, 'index'])->name('base');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -27,34 +23,30 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 
-/**
- * Home page
- */
-Route::get('/', [HomePageController::class, 'index'])->name('base');
 
-/**
- * Routes for players resource operation
- */
-Route::resource('players', PlayerController::class);
 
-/**
- * Routes for games
- */
-Route::prefix('games')->group(function () {
-    Route::controller(GameManagmentController::class)->group(function () {
-        Route::get('/new-game', 'startNewGame')->name('games.newGame');
-        Route::post('/new-game', 'selectPlayers')->name('games.selectPlayers');
-        Route::get('/new-game/points', 'pointsForm')->name('games.pointsForm');
-    });
-    Route::controller(GameStatisticsController::class)->group(function () {
-        Route::get('/list', 'gamesList')->name('games.index');
-    });
-    Route::controller(GamePointsController::class)->group(function () {
-        Route::post('/new-game/points', 'pointsCalculate')->name('games.pointsCalculate');
+    /**
+     * Routes for players resource operation
+     */
+    Route::resource('players', PlayerController::class);
+
+    /**
+     * Routes for games
+     */
+    Route::prefix('games')->group(function () {
+        Route::controller(GameManagmentController::class)->group(function () {
+            Route::get('/new-game', 'startNewGame')->name('games.newGame');
+            Route::post('/new-game', 'selectPlayers')->name('games.selectPlayers');
+            Route::get('/new-game/points', 'pointsForm')->name('games.pointsForm');
+        });
+        Route::controller(GameStatisticsController::class)->group(function () {
+            Route::get('/list', 'gamesList')->name('games.index');
+        });
+        Route::controller(GamePointsController::class)->group(function () {
+            Route::post('/new-game/points', 'pointsCalculate')->name('games.pointsCalculate');
+        });
     });
 });
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

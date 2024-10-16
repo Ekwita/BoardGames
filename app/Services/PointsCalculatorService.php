@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Actions\CreateGame;
 use App\Actions\SetWinner;
+use App\Factories\GameFactory;
 use App\Interfaces\GameResultProviderInterface;
 use App\Interfaces\PlayerPointsServiceInterface;
 use App\Interfaces\PointsCalculatorInterface;
@@ -13,7 +14,6 @@ class PointsCalculatorService implements PointsCalculatorInterface
 {
 
     public function __construct(
-        protected CreateGame $createGame,
         protected PlayerPointsServiceInterface $playerPointsService,
         protected GameResultProviderInterface $gameResultProvider,
         protected SetWinner $setWinner
@@ -25,9 +25,9 @@ class PointsCalculatorService implements PointsCalculatorInterface
     {
         $gameData = session()->get('gameData');
         $selectedPlayers = $gameData->allPlayersResults->playersResults;
-
+        // dd($selectedPlayers);
         //Create new game in database
-        $this->createGame->execute();
+        GameFactory::create($request);
 
         //Select best player after calculating points
         $bestPlayer = $this->playerPointsService->calculate($request, $selectedPlayers, $gameData);

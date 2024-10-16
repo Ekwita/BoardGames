@@ -19,6 +19,7 @@ class PlayerPointsService implements PlayerPointsServiceInterface
         $bestArticaft = 0;
         $bestPlayer = '';
 
+
         foreach ($selectedPlayers as $selectedPlayerResult) {
             $playerId = $selectedPlayerResult->playerId;
             $selectedPlayer = $selectedPlayerResult->playerName;

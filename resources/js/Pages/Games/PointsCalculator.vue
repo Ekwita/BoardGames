@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted, watch, reactive } from 'vue';
+import { onMounted, watch, reactive } from 'vue';
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     players: {
@@ -195,5 +196,5 @@ function submitForm() {
         </div>
         <button type="submit" class="bg-gray-800 text-gray-200 rounded-md p-2 mt-4">Confirm</button>
     </form>
-    <a :href="baseUrl"><button class="bg-gray-800 text-gray-200 rounded-md p-2 mt-4">Home</button></a>
+    <Link :href="route('base')"><button class="bg-gray-800 text-gray-200 rounded-md p-2 mt-4">Home</button></Link>
 </template>

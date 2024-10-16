@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Actions\CreateGame;
+use App\Actions\CreateDataGame;
 use App\Actions\SetWinner;
 use App\DTOs\NewGameParams\AllPlayersResultsDTO;
 use App\DTOs\NewGameParams\GameDataDTO;
@@ -31,10 +31,10 @@ class GamePointsControllerTest extends TestCase
 
         // Wykorzystujemy rzeczywiste implementacje serwisów
         $this->pointsCalculatorService = new PointsCalculatorService(
-            new CreateGame(),
             new PlayerPointsService(),
             new GameResultService(),
-            app(SetWinner::class)
+            app(SetWinner::class),
+            // new CreateDataGame(),
         );
     }
 

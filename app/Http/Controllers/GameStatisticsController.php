@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\StatisticsService;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class GameStatisticsController extends Controller
 {
@@ -12,10 +13,12 @@ class GameStatisticsController extends Controller
     /**
      * Display a list of all games with statistics.
      */
-    public function gamesList(): View
+    public function gamesList(): Response
     {
         $games = $this->statisticsService->getGamesList();
 
-        return view('games.list', ['games' => $games['games']]);
+        return Inertia::render('Games/List', ['games' => $games['games']]);
+
+        // return view('games.list', ['games' => $games['games']]);
     }
 }
