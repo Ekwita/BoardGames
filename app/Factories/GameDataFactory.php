@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 class GameDataFactory
 {
-    public static function createGameData(int $gameId, Collection $playersResults): GameDataDTO
+    public static function createGameData(Collection $playersResults): GameDataDTO
     {
         $allPlayersResults = new AllPlayersResultsDTO($playersResults);
-        return new GameDataDTO($gameId, $allPlayersResults);
+        return new GameDataDTO(null, $allPlayersResults);
     }
 }

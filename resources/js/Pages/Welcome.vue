@@ -70,7 +70,7 @@ function formatDate(date) {
                 </header>
 
                 <main class="mt-6">
-                    <div v-if="game && results">
+                    <div v-if="game && results.length > 0">
                         <div class="title">Last game result: <br></div>
                         <div id="winner-name">Winner: {{ game.winner }}</div>
 
@@ -101,7 +101,7 @@ function formatDate(date) {
                         <strong><label>Date: {{ formatDate(game.created_at) }}</label></strong>
                     </div>
                     <div v-else>
-                        You have no games yet.
+                        <p>You have no games yet.</p>
                     </div>
                 </main>
 

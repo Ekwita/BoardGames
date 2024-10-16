@@ -26,8 +26,11 @@ class PointsCalculatorService implements PointsCalculatorInterface
         $gameData = session()->get('gameData');
         $selectedPlayers = $gameData->allPlayersResults->playersResults;
 
+
         //Create new game in database
-        GameFactory::create($request);
+        $game = GameFactory::create($request);
+        $gameId = $game->id;
+        $gameData->id = $gameId;
 
         //Select best player after calculating points
         $bestPlayer = $this->playerPointsService->calculate($request, $selectedPlayers, $gameData);
@@ -39,7 +42,6 @@ class PointsCalculatorService implements PointsCalculatorInterface
 
         //Get saved game result
         $resultData = $this->gameResultProvider->getGameResult($gameData);
-
         session()->forget('gameData');
 
         return $resultData;

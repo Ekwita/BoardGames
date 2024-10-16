@@ -51,14 +51,18 @@ class StatisticsService
     //
     public function getLastGameStatistics(): array
     {
-
-        $user = Auth::user();
         $data = [
             'lastGame' => null,
             'results' => null
         ];
-        $lastGame = $user->games()->latest()->first();
 
+        if (Auth::check()) {
+            $user = Auth::user();
+            $lastGame = $user->games()->latest()->first();
+        } else {
+            $lastGame = null;
+        }
+        
         if ($lastGame !== null) {
             $results = $lastGame->results;
             $data = [
@@ -66,7 +70,6 @@ class StatisticsService
                 'results' => $results
             ];
         }
-        
         return $data;
     }
 }

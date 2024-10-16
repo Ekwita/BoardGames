@@ -28,7 +28,7 @@ class HomePageController extends Controller
                     'id' => Auth::user()->id,
                     'name' => Auth::user()->name,
                 ],
-            ] : null,
+            ] : ['user' => null],
         ]);
     }
 }

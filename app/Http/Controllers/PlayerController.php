@@ -41,7 +41,7 @@ class PlayerController extends Controller
         );
         $this->playerService->createPlayer($playerDTO);
 
-        return to_route('players.index');
+        return back();
     }
 
     /**

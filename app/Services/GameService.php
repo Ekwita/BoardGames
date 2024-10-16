@@ -12,25 +12,26 @@ use App\Models\Game;
 use App\Models\Player;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class GameService implements GameInterface
 {
 
     public function getPlayersList(): AllPlayersListDTO
     {
-        $players = Player::select('id', 'player_name')->get();
+        $players = Auth::user()->players()->select('id', 'player_name')->get();
         $allPlayersList =  PlayersListFactory::createAllPlayersList($players);
 
         return $allPlayersList;
     }
-    
+
     /**
      * Create new GameDataDTO object
      * Put data to session
      */
     public function createGameWithPlayers(Request $request): void
     {
-        $gameId = $this->createNewGameId();
+        // $gameId = $this->createNewGameId();
 
         $playersInGame = $this->selectPlayersInGame($request);
         $playersResultCollection = new Collection();
@@ -41,7 +42,7 @@ class GameService implements GameInterface
             $playersResultCollection->push(OnePlayerResultFactory::createPlayerResult($playerId, $player));
         }
 
-        $gameData = GameDataFactory::createGameData($gameId, $playersResultCollection);
+        $gameData = GameDataFactory::createGameData($playersResultCollection);
 
         $request->session()->put('gameData', $gameData);
     }
@@ -63,14 +64,14 @@ class GameService implements GameInterface
     //PRIVATE FUNCTIONS
 
     //Create id for new game based on id of the last game
-    private function createNewGameId(): int
-    {
-        $latestGame = Game::latest()->first();
-        $lastGameId = $latestGame ? $latestGame->id : 0;
-        $newGameId = $lastGameId + 1;
+    // private function createNewGameId(): int
+    // {
+    //     $latestGame = Game::latest()->first();
+    //     $lastGameId = $latestGame ? $latestGame->id : 0;
+    //     $newGameId = $lastGameId + 1;
 
-        return $newGameId;
-    }
+    //     return $newGameId;
+    // }
 
 
     //Summary of selectPlayersInGame

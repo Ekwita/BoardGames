@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 
 class GameFactory
 {
-    public static function create(Request $request): void
+    public static function create(Request $request): Game
     {
         $user = $request->user();
 
-        Game::create([
+        return Game::create([
             'user_id' => $user->id
         ]);
     }
