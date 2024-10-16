@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Player extends Model
@@ -12,6 +13,7 @@ class Player extends Model
 
     protected $fillable = [
         'player_name',
+        'user_id',
         'games',
         'wins',
         'deaths',
@@ -32,5 +34,10 @@ class Player extends Model
     public function results(): HasMany
     {
         return $this->hasMany(Result::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

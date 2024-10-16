@@ -6,6 +6,7 @@ class PlayerDTO
 {
     public function __construct(
         public int $id,
+        public int $user_id,
         public string $player_name,
         public int $games = 0,
         public int $wins = 0,

@@ -5,12 +5,14 @@ namespace App\Services;
 use App\DTOs\PlayerDTO;
 use App\Models\Player;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class PlayerService
 {
     public function getAllPlayers(): Collection
     {
-        return Player::all()->map(function ($player) {
+        $user = Auth::user();
+        return $user->players->map(function ($player) {
             return $this->mapToDTO($player);
         });
     }
@@ -19,6 +21,7 @@ class PlayerService
     {
         $player = Player::create([
             'player_name' => $playerDTO->player_name,
+            'user_id' => $playerDTO->user_id,
             'games' => $playerDTO->games,
             'wins' => $playerDTO->wins,
             'deaths' => $playerDTO->deaths,
@@ -75,6 +78,7 @@ class PlayerService
     {
         return new PlayerDTO(
             id: $player->id,
+            user_id: $player->user_id,
             player_name: $player->player_name,
             games: $player->games,
             wins: $player->wins,

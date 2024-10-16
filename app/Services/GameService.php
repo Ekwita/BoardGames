@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\DTOs\AllPlayersListDTO;
-use App\DTOs\GameDataDTO;
-use App\Factories\GameFactory;
+use App\DTOs\NewGameParams\GameDataDTO;
+use App\Factories\GameDataFactory;
 use App\Factories\OnePlayerResultFactory;
 use App\Factories\PlayersListFactory;
 use App\Interfaces\GameInterface;
@@ -41,7 +41,7 @@ class GameService implements GameInterface
             $playersResultCollection->push(OnePlayerResultFactory::createPlayerResult($playerId, $player));
         }
 
-        $gameData = GameFactory::createGameData($gameId, $playersResultCollection);
+        $gameData = GameDataFactory::createGameData($gameId, $playersResultCollection);
 
         $request->session()->put('gameData', $gameData);
     }
