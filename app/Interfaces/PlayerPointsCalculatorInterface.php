@@ -2,11 +2,10 @@
 
 namespace App\Interfaces;
 
-use App\DTOs\GameDataDTO;
-use App\DTOs\PlayerGameDataDTO;
-use Illuminate\Http\Request;
+use App\DTOs\NewGameParams\OnePlayerResultDTO;
+
 
 interface PlayerPointsCalculatorInterface
 {
-    public function calculatePoints(PlayerGameDataDTO $playerGameDataDTO): array;
+    public function calculatePoints(OnePlayerResultDTO $dto): array;
 }

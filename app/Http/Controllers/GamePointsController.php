@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlayerPointsRequest;
 use App\Interfaces\PointsCalculatorInterface;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,17 +14,13 @@ class GamePointsController extends Controller
     /**
      * Calculate player points and show the result.
      */
-    public function pointsCalculate(Request $request): Response
+    public function pointsCalculate(PlayerPointsRequest $request): Response
     {
-        // Calculate points for each player
-
         $resultData = $this->pointsCalculator->pointsCalculator($request);
-
 
         return Inertia::render('Games/Result', [
             'results' => $resultData['results'],
             'winner' => $resultData['winner']
         ]);
-
     }
 }

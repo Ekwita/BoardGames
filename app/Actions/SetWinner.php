@@ -8,9 +8,9 @@ use App\Models\Player;
 
 class SetWinner
 {
-    public function handle(GameDataDTO $gameData, string $bestPlayer): void
+    public function handle(string $bestPlayer, int $gameId): void
     {
-        Game::where('id', $gameData->id)->update(['winner' => $bestPlayer]);
+        Game::where('id', $gameId)->update(['winner' => $bestPlayer]);
         Player::where('player_name', $bestPlayer)->increment('wins', 1);
     }
 }

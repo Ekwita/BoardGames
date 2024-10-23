@@ -52,9 +52,9 @@ onMounted(() => {
                 art25: false,
                 art30: false,
             },
-            gold: null,
-            tokens: null,
-            cards: null,
+            gold: 0,
+            tokens: 0,
+            cards: 0,
             points: 0,
             artifactsPoints: 0,
             statusPoints: 0,
@@ -74,9 +74,9 @@ onMounted(() => {
 
                 //
                 if (!playerData[player].hasAnyTrueArtifact) {
-                    playerData[player].gold = null;
-                    playerData[player].tokens = null;
-                    playerData[player].cards = null;
+                    playerData[player].gold = 0;
+                    playerData[player].tokens = 0;
+                    playerData[player].cards = 0;
                 }
                 // Calculate artifact points
                 playerData[player].artifactsPoints = Object.entries(artifacts)
@@ -103,6 +103,7 @@ function totalPointsCalculator(player) {
 
 // Function to send data to controller
 function submitForm() {
+    console.log(playerData);
     document.querySelector('form').submit();
 }
 

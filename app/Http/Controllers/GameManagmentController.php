@@ -25,9 +25,8 @@ class GameManagmentController extends Controller
     }
 
     /**
-     * Creating new game
-     * Adding players to game
-     * Insert game id & selected players to session.
+     * Create DTO with selected players.
+     * Put DTO to session.
      */
     public function selectPlayers(Request $request): RedirectResponse
     {

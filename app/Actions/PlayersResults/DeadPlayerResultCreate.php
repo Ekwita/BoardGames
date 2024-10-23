@@ -2,12 +2,13 @@
 
 namespace   App\Actions\PlayersResults;
 
+use App\DTOs\NewGameParams\OnePlayerResultDTO;
 use App\Models\Result;
 
 class DeadPlayerResultCreate
 {
-    public function handle(array $data): void
+    public function handle(OnePlayerResultDTO $dto): void
     {
-        Result::create($data);
+        Result::create($dto->toArray());
     }
 }

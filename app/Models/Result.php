@@ -15,9 +15,6 @@ class Result extends Model
         'player_id',
         'player_name',
         'status',
-        'gold',
-        'tokens',
-        'cards',
         'art5',
         'art7',
         'art10',
@@ -27,6 +24,9 @@ class Result extends Model
         'art20',
         'art25',
         'art30',
+        'gold',
+        'tokens',
+        'cards',
         'total_points'
     ];
 

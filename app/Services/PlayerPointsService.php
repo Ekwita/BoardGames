@@ -2,48 +2,34 @@
 
 namespace App\Services;
 
-use App\DTOs\NewGameParams\GameDataDTO;
-use App\DTOs\PlayerGameDataDTO;
+use App\DTOs\NewGameParams\OnePlayerResultDTO;
+use App\DTOs\NewGameParams\PlayerPointsComparisonDTO;
 use App\Interfaces\PlayerPointsCalculatorInterface;
 use App\Interfaces\PlayerPointsServiceInterface;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class PlayerPointsService implements PlayerPointsServiceInterface
 {
-
-    // public function __construct(protected PlayerPointsCalculatorInterface ){}
-    public function calculate(Request $request, Collection $selectedPlayers, GameDataDTO $gameData): ?string
+    public function calculate(OnePlayerResultDTO $playerResultDto, PlayerPointsComparisonDTO $playerPointsDto): PlayerPointsComparisonDTO
     {
-        $bestScore = 0;
-        $bestArticaft = 0;
-        $bestPlayer = '';
+        $totalPoints = 0;
+        $playerBestArtifact = 0;
 
+        $pointsResult = app()->make(PlayerPointsCalculatorInterface::class, ['type' => $playerResultDto->status])->calculatePoints($playerResultDto);
 
-        foreach ($selectedPlayers as $selectedPlayerResult) {
-            $playerId = $selectedPlayerResult->playerId;
-            $selectedPlayer = $selectedPlayerResult->playerName;
+        $totalPoints = $pointsResult['totalPoints'];
+        $playerBestArtifact = $pointsResult['playerBestArtifact'];
 
-            $status = $request->input('status_' . $selectedPlayer);
+        return $this->setBestPlayer($totalPoints, $playerBestArtifact, $playerResultDto, $playerPointsDto);
+    }
 
-            $totalPoints = 0;
-            $playerBestArtifact = 0;
-
-
-            $playerGameDataDto = new PlayerGameDataDTO($request, $selectedPlayer, $status, $gameData, $playerId, $playerBestArtifact);
-
-            $pointsResult = app()->make(PlayerPointsCalculatorInterface::class, ['type' => $status])->calculatePoints($playerGameDataDto);
-
-            $totalPoints = $pointsResult['totalPoints'];
-            $playerBestArtifact = $pointsResult['playerBestArtifact'];
-
-
-            if ($totalPoints > $bestScore || $totalPoints == $bestScore && $playerBestArtifact > $bestArticaft) {
-                $bestScore = $totalPoints;
-                $bestArticaft = $playerBestArtifact;
-                $bestPlayer = $selectedPlayer;
-            }
+    private function setBestPlayer(int $totalPoints, int $playerBestArtifact, OnePlayerResultDTO $dto, PlayerPointsComparisonDTO $playerPointsDto): ?PlayerPointsComparisonDTO
+    {
+        if ($totalPoints > $playerPointsDto->bestScore || $totalPoints == $playerPointsDto->bestScore && $playerBestArtifact > $playerPointsDto->bestArtifact) {
+            $playerPointsDto->bestScore = $totalPoints;
+            $playerPointsDto->bestArtifact = $playerBestArtifact;
+            $playerPointsDto->bestPlayer = $dto->playerName;
         }
-        return $bestPlayer;
+
+        return $playerPointsDto;
     }
 }

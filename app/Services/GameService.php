@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\DTOs\AllPlayersListDTO;
-use App\DTOs\NewGameParams\GameDataDTO;
-use App\Factories\GameDataFactory;
-use App\Factories\OnePlayerResultFactory;
+use App\DTOs\NewGameParams\SelectedPlayersListDTO;
 use App\Factories\PlayersListFactory;
+use App\Factories\SelectPlayerFactory;
 use App\Interfaces\GameInterface;
-use App\Models\Game;
 use App\Models\Player;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 class GameService implements GameInterface
 {
 
+    //Get players list from database
     public function getPlayersList(): AllPlayersListDTO
     {
         $players = Auth::user()->players()->select('id', 'player_name')->get();
@@ -31,20 +32,18 @@ class GameService implements GameInterface
      */
     public function createGameWithPlayers(Request $request): void
     {
-        // $gameId = $this->createNewGameId();
 
         $playersInGame = $this->selectPlayersInGame($request);
-        $playersResultCollection = new Collection();
+        $selectedPlayers = collect();
 
         foreach ($playersInGame as $player) {
-
             $playerId = Player::where('player_name', $player)->pluck('id')->first();
-            $playersResultCollection->push(OnePlayerResultFactory::createPlayerResult($playerId, $player));
+            $selectedPlayers->push(SelectPlayerFactory::addPlayerToGame($playerId, $player));
         }
 
-        $gameData = GameDataFactory::createGameData($playersResultCollection);
+        $playersList = new SelectedPlayersListDTO($selectedPlayers);
 
-        $request->session()->put('gameData', $gameData);
+        $request->session()->put('selectedPlayers', $playersList);
     }
 
     /**
@@ -52,9 +51,9 @@ class GameService implements GameInterface
      */
     public function getPlayersListFromSession(): Collection
     {
-        $gameData = $this->getDataFromSession();
-        $players = $gameData->allPlayersResults->playersResults->map(function ($playerResult) {
-            return $playerResult->playerName;
+        $playersList = session()->get('selectedPlayers');
+        $players = $playersList->selectedPlayers->map(function ($selectedPlayer) {
+            return $selectedPlayer->playerName;
         });
 
         return $players;
@@ -62,17 +61,6 @@ class GameService implements GameInterface
 
 
     //PRIVATE FUNCTIONS
-
-    //Create id for new game based on id of the last game
-    // private function createNewGameId(): int
-    // {
-    //     $latestGame = Game::latest()->first();
-    //     $lastGameId = $latestGame ? $latestGame->id : 0;
-    //     $newGameId = $lastGameId + 1;
-
-    //     return $newGameId;
-    // }
-
 
     //Summary of selectPlayersInGame
     private function selectPlayersInGame(Request $request): array
@@ -89,13 +77,5 @@ class GameService implements GameInterface
         }
 
         return $selectedPlayers;
-    }
-
-    // Summary of getDataFromSession
-    private function getDataFromSession(): GameDataDTO
-    {
-        $gameData = session()->get('gameData');
-
-        return $gameData;
     }
 }

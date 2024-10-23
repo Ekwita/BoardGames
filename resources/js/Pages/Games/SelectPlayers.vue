@@ -1,7 +1,6 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
 
-// Zdefiniujmy propsy, w których players to obiekt zawierający kolekcję graczy
 const props = defineProps({
     players: {
         type: Object, // AllPlayersListDTO with players collection
@@ -11,7 +10,6 @@ const props = defineProps({
     },
 });
 
-// Zmienna form dla formularza wyboru graczy
 const form = useForm({
     player1: '',
     player2: '',
@@ -21,19 +19,17 @@ const form = useForm({
     player6: '',
 });
 
-// Obsługa przesyłania formularza wyboru graczy
+
 const submitPlayers = () => {
     form.post(route('games.selectPlayers'), {
-        preserveScroll: true, // zachowaj pozycję widoku
+        preserveScroll: true,
     });
 };
 
-// Zmienna i obsługa formularza dodawania nowego gracza
 const newPlayerForm = useForm({
     player_name: '',
 });
 
-// Obsługa przesyłania formularza dodawania nowego gracza
 const submitNewPlayer = () => {
     newPlayerForm.post(route('players.store'), {
         onSuccess: () => {
