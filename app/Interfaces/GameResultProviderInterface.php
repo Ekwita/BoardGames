@@ -2,9 +2,7 @@
 
 namespace App\Interfaces;
 
-use App\DTOs\NewGameParams\GameDataDTO;
-
 interface GameResultProviderInterface
 {
-    public function getGameResult(GameDataDTO $gameData): array;
+    public function getGameResult(int $gameId): array;
 }

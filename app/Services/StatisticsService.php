@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTOs\GamesListDTO;
 use App\Models\Game;
 use App\Models\Result;
+use Illuminate\Support\Facades\Auth;
 
 class StatisticsService
 {
@@ -14,19 +15,18 @@ class StatisticsService
     public function getGamesList(): array
     {
 
-        $allGameIds = Game::pluck('id');
+        $user = Auth::user();
 
-        if ($allGameIds->isEmpty()) {
+        $games = $user->games()->orderByDesc('id')->paginate(1);
+
+        if ($games->isEmpty()) {
             return ['games' => null];
         }
 
-        $games = Game::whereIn('id', $allGameIds)->orderByDesc('id')->paginate(1);
-        $gamesStatiscitcs = Result::whereIn('game_id', $allGameIds)->get()->groupBy('game_id');
-
-        $gameDetails = $games->map(function ($game) use ($gamesStatiscitcs) {
+        $gameDetails = $games->map(function ($game) {
             $gameId = $game->id;
             $winner = $game->winner;
-            $statistics = $gamesStatiscitcs->get($gameId, collect());
+            $statistics = $game->results;
             $createdAt = $game->created_at ? $game->created_at->format('d-m-Y H:i:s') : null;
 
             return new GamesListDTO(
@@ -55,10 +55,16 @@ class StatisticsService
             'lastGame' => null,
             'results' => null
         ];
-        $lastGame = Game::latest()->first();
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            $lastGame = $user->games()->latest()->first();
+        } else {
+            $lastGame = null;
+        }
+        
         if ($lastGame !== null) {
-            $gameId = $lastGame->id;
-            $results = Result::where('game_id', $gameId)->get();
+            $results = $lastGame->results;
             $data = [
                 'lastGame' => $lastGame,
                 'results' => $results

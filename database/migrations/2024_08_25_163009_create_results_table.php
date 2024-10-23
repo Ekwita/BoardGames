@@ -17,9 +17,6 @@ return new class extends Migration
             $table->foreignId('player_id')->constrained();
             $table->string('player_name');
             $table->integer('status');
-            $table->integer('gold')->nullable()->default(0);
-            $table->integer('tokens')->nullable()->default(0);
-            $table->integer('cards')->nullable()->default(0);
             $table->boolean('art5')->nullable()->default(0);
             $table->boolean('art7')->nullable()->default(0);
             $table->boolean('art10')->nullable()->default(0);
@@ -29,7 +26,10 @@ return new class extends Migration
             $table->boolean('art20')->nullable()->default(0);
             $table->boolean('art25')->nullable()->default(0);
             $table->boolean('art30')->nullable()->default(0);
-            $table->integer('total_points');
+            $table->integer('gold')->nullable()->default(0);
+            $table->integer('tokens')->nullable()->default(0);
+            $table->integer('cards')->nullable()->default(0);
+            $table->integer('total_points')->default(0);
             $table->timestamps();
         });
     }

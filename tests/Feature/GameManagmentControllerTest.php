@@ -6,6 +6,7 @@ use App\DTOs\NewGameParams\AllPlayersResultsDTO;
 use App\DTOs\NewGameParams\GameDataDTO;
 use App\DTOs\NewGameParams\OnePlayerResultDTO;
 use App\Models\Player;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -63,6 +64,8 @@ class GameManagmentControllerTest extends TestCase
 
     public function test_points_form_return_correct_view(): void
     {
+        $user = User::factory()->create();
+
         $players = Player::factory()->count(3)->create();
 
         $playersResults = collect();
