@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\DTOs\GamesListDTO;
-use App\Models\Game;
-use App\Models\Result;
 use Illuminate\Support\Facades\Auth;
 
 class StatisticsService

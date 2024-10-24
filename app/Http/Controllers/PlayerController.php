@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\PlayerDTO;
 use App\Http\Requests\StorePlayerRequest;
-use App\Services\PlayerService;
+use App\Interfaces\PlayerDisplayInterface;
+use App\Interfaces\PlayerServiceInterface;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PlayerController extends Controller
 {
 
-    public function __construct(protected PlayerService $playerService) {}
+    public function __construct(protected PlayerServiceInterface $playerService) {}
 
     /**
      * Display a listing of the players.
@@ -25,7 +23,6 @@ class PlayerController extends Controller
 
         return Inertia::render('Players/List', ['players' => $players]);
 
-        // return view('players.list', ['players' => $players]);
     }
 
     /**
@@ -33,13 +30,8 @@ class PlayerController extends Controller
      */
     public function store(StorePlayerRequest $request): RedirectResponse
     {
-        // dd($user);
-        $playerDTO = new PlayerDTO(
-            id: 0,
-            user_id: $request->user()->id,
-            player_name: $request->input('player_name')
-        );
-        $this->playerService->createPlayer($playerDTO);
+        $createPlayerDto = $request->getDto();
+        $this->playerService->createPlayer($createPlayerDto);
 
         return back();
     }

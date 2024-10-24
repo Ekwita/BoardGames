@@ -6,7 +6,7 @@ use App\Services\StatisticsService;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class GameStatisticsController extends Controller
+class GameStatisticController extends Controller
 {
     public function __construct(protected StatisticsService $statisticsService) {}
 

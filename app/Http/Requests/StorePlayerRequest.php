@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\DTOs\PlayerDTO;
+use App\DTOs\Players\CreatePlayerDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePlayerRequest extends FormRequest
@@ -24,5 +26,13 @@ class StorePlayerRequest extends FormRequest
         return [
             'player_name' => 'required|unique:players|max:30|regex:/^[a-zA-Z0-9]+$/'
         ];
+    }
+
+    public function getDto(): CreatePlayerDTO
+    {
+        return new CreatePlayerDTO(
+            $this->user()->id,
+            $this->get('player_name')
+        );
     }
 }

@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-use App\DTOs\NewGameParams\GameDataDTO;
-use App\Interfaces\GameResultProviderInterface;
+use App\Interfaces\GameResultServiceInterface;
 use App\Models\Game;
 use App\Models\Result;
 
-class GameResultService implements GameResultProviderInterface
+class GameResultService implements GameResultServiceInterface
 {
     public function getGameResult(int $gameId): array
     {

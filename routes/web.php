@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\GameManagmentController;
-use App\Http\Controllers\GamePointsController;
-use App\Http\Controllers\GameStatisticsController;
+use App\Http\Controllers\GamePointController;
+use App\Http\Controllers\GameStatisticController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ProfileController;
@@ -40,10 +40,10 @@ Route::middleware('auth')->group(function () {
             Route::post('/new-game', 'selectPlayers')->name('games.selectPlayers');
             Route::get('/new-game/points', 'pointsForm')->name('games.pointsForm');
         });
-        Route::controller(GameStatisticsController::class)->group(function () {
+        Route::controller(GameStatisticController::class)->group(function () {
             Route::get('/list', 'gamesList')->name('games.index');
         });
-        Route::controller(GamePointsController::class)->group(function () {
+        Route::controller(GamePointController::class)->group(function () {
             Route::post('/new-game/points', 'pointsCalculate')->name('games.pointsCalculate');
         });
     });

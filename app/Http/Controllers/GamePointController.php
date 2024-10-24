@@ -7,7 +7,7 @@ use App\Interfaces\PointsCalculatorInterface;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class GamePointsController extends Controller
+class GamePointController extends Controller
 {
     public function __construct(protected PointsCalculatorInterface $pointsCalculator) {}
 

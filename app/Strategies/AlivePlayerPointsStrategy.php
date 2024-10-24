@@ -2,17 +2,15 @@
 
 namespace App\Strategies;
 
-use App\Actions\PlayersResults\AlivePlayerResultCreate;
-use App\Actions\PlayersStats\AlivePlayerStatsUpdate;
+use App\Actions\Interfaces\PlayerResultCreateInterface;
+use App\Actions\Interfaces\PlayerStatsUpdateInterface;
 use App\DTOs\NewGameParams\OnePlayerResultDTO;
-use App\DTOs\PlayerGameDataDTO;
 use App\Enums\ArtifactType;
 use App\Interfaces\PlayerPointsCalculatorInterface;
-use Illuminate\Http\Request;
 
 class AlivePlayerPointsStrategy implements PlayerPointsCalculatorInterface
 {
-    public function __construct(protected AlivePlayerResultCreate $alivePlayerResultCreate, protected AlivePlayerStatsUpdate $alivePlayerStatsUpdate) {}
+    public function __construct(protected PlayerResultCreateInterface $playerResultCreate, protected PlayerStatsUpdateInterface $playerStatsUpdate) {}
 
     public function calculatePoints(OnePlayerResultDTO $dto): array
     {
@@ -32,8 +30,8 @@ class AlivePlayerPointsStrategy implements PlayerPointsCalculatorInterface
         $dto->totalPoints = $totalPoints;
         
         // Create PlayerResult
-        $this->alivePlayerResultCreate->handle($dto);
-        $this->alivePlayerStatsUpdate->handle($dto);
+        $this->playerResultCreate->handle($dto);
+        $this->playerStatsUpdate->handle($dto);
 
         return [
             'totalPoints' => $totalPoints,

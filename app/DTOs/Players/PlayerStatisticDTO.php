@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DTOs;
+namespace App\DTOs\Players;
 
-class PlayerDTO
+class PlayerStatisticDTO
 {
     public function __construct(
         public int $id,
@@ -24,4 +24,9 @@ class PlayerDTO
         public int $art25 = 0,
         public int $art30 = 0
     ) {}
+
+    public function toArray(): array
+    {
+        return [];
+    }
 }

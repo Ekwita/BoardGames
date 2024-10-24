@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface GameResultProviderInterface
+interface GameResultServiceInterface
 {
     public function getGameResult(int $gameId): array;
 }

@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
-use App\Actions\SetWinner;
-use App\DTOs\AllPlayersListDTO;
-use App\DTOs\NewGameParams\AllPlayersResultsDTO;
-use App\DTOs\NewGameParams\OnePlayerResultDTO;
+use App\Actions\Interfaces\SetWinnerInterface;
+use App\DTOs\NewGameParams\GameDataDTO;
 use App\DTOs\NewGameParams\PlayerPointsComparisonDTO;
 use App\Factories\GameFactory;
 use App\Factories\OnePlayerResultFactory;
-use App\Http\Requests\PlayerPointsRequest;
-use App\Interfaces\GameResultProviderInterface;
+use App\Interfaces\GameResultServiceInterface;
 use App\Interfaces\PlayerPointsServiceInterface;
 use App\Interfaces\PointsCalculatorInterface;
 use Illuminate\Http\Request;
@@ -19,11 +18,11 @@ class PointsCalculatorService implements PointsCalculatorInterface
 {
 
     public function __construct(
-        protected PlayerPointsServiceInterface $playerPointsService,
         protected GameFactory $gameFactory,
-        protected GameResultProviderInterface $gameResultProvider,
-        protected SetWinner $setWinner,
         protected OnePlayerResultFactory $onePlayerResultFactory,
+        protected GameResultServiceInterface $gameResultService,
+        protected PlayerPointsServiceInterface $playerPointsService,
+        protected SetWinnerInterface $setWinner,
     ) {}
 
     /**
@@ -33,8 +32,6 @@ class PointsCalculatorService implements PointsCalculatorInterface
     {
         //Create new game
         $gameData = $this->gameFactory->create($request);
-
-        // session()->put('gameData', $gameData);
 
         $selectedPlayersObject = session()->get('selectedPlayers');
         $selectedPlayers = $selectedPlayersObject->selectedPlayers;
@@ -50,16 +47,21 @@ class PointsCalculatorService implements PointsCalculatorInterface
         }
 
         //Set the winner
-        if ($bestPlayer->bestPlayer != null) {
-            $this->setWinner->handle($bestPlayer->bestPlayer, $gameData->id);
-        }
+        $this->setWinner($bestPlayer, $gameData);
 
         //Get saved game result
-        $resultData = $this->gameResultProvider->getGameResult($gameData->id);
+        $resultData = $this->gameResultService->getGameResult($gameData->id);
 
 
         session()->forget('gameData');
 
         return $resultData;
+    }
+
+    private function setWinner(PlayerPointsComparisonDTO $bestPlayer, GameDataDTO $gameData): void
+    {
+        if ($bestPlayer->bestPlayer != null) {
+            $this->setWinner->handle($bestPlayer, $gameData);
+        }
     }
 }
