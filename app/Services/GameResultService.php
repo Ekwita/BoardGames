@@ -2,16 +2,15 @@
 
 namespace App\Services;
 
-use App\DTOs\NewGameParams\GameDataDTO;
-use App\Interfaces\GameResultProviderInterface;
+use App\Interfaces\GameResultServiceInterface;
 use App\Models\Game;
 use App\Models\Result;
 
-class GameResultService implements GameResultProviderInterface
+class GameResultService implements GameResultServiceInterface
 {
-    public function getGameResult(GameDataDTO $gameData): array
+    public function getGameResult(int $gameId): array
     {
-        $results = Result::where('game_id', $gameData->id)
+        $results = Result::where('game_id', $gameId)
             ->orderByDesc('total_points')
             ->orderByDesc('art30')
             ->orderByDesc('art25')
@@ -24,7 +23,7 @@ class GameResultService implements GameResultProviderInterface
             ->orderByDesc('art5')
             ->get();
 
-        $winner = Game::where('id', $gameData->id)->value('winner');
+        $winner = Game::where('id', $gameId)->value('winner');
 
         $resultData = [
             'results' => $results,

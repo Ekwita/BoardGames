@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->id();
-            $table->string('player_name')->unique();
+            $table->string('player_name');
+            $table->foreignId('user_id')->constrained();
             $table->integer('games')->default('0');
             $table->integer('wins')->default('0');
             $table->integer('deaths')->default('0');

@@ -2,12 +2,14 @@
 
 namespace   App\Actions\PlayersResults;;
 
+use App\Actions\Interfaces\PlayerResultCreateInterface;
+use App\DTOs\NewGameParams\OnePlayerResultDTO;
 use App\Models\Result;
 
-class AlivePlayerResultCreate
+class AlivePlayerResultCreate implements PlayerResultCreateInterface
 {
-    public function handle(array $data): void
+    public function handle(OnePlayerResultDTO $dto): void
     {
-        Result::create($data);
+        Result::create($dto->toArray());
     }
 }
