@@ -35,7 +35,7 @@ Route::middleware('auth')->group(function () {
         Route::controller(GameManagmentController::class)->group(function () {
             Route::get('/new-game', 'startNewGame')->name('games.newGame');
             Route::post('/new-game', 'selectPlayers')->name('games.selectPlayers');
-            Route::get('/new-game/points', 'pointsForm')->name('games.pointsForm');
+            Route::get('/new-game/points', 'displayPointsForm')->name('games.pointsForm');
         });
         Route::controller(GameStatisticController::class)->group(function () {
             Route::get('/list', 'gamesList')->name('games.index');

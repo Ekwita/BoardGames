@@ -40,7 +40,7 @@ class GameManagmentController extends Controller
     /**
      * 
      */
-    public function pointsForm(): Response
+    public function displayPointsForm(): Response
     {
         $players = $this->gameService->getPlayersListFromSession();
 

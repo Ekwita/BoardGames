@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class PlayerFactory extends Factory
     public function definition(): array
     {
         return [
-            'player_name' => fake()->regexify('[a-zA-Z0-9]{1,30}'),
+            'player_name' => fake()->word(),
+            'user_id' => User::factory(),
             'games' => fake()->numberBetween(1, 100),
             'wins' => fake()->numberBetween(1, 100),
             'deaths' => fake()->numberBetween(1, 100),
