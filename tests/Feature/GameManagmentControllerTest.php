@@ -2,34 +2,38 @@
 
 namespace Tests\Feature;
 
-use App\DTOs\NewGameParams\AllPlayersResultsDTO;
-use App\DTOs\NewGameParams\GameDataDTO;
-use App\DTOs\NewGameParams\OnePlayerResultDTO;
+
+use App\DTOs\NewGameParams\SelectedPlayersListDTO;
 use App\Models\Player;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class GameManagmentControllerTest extends TestCase
 {
     use RefreshDatabase;
-    public function test_start_new_game_get_players_list_from_session(): void
-    {
-        $players = Player::factory()->count(10)->create();
 
-        $response = $this->get(route('games.newGame'));
+    public function test_start_new_game_get_players_list(): void
+    {
+        $user = User::factory()->create();
+
+        $players = Player::factory()->count(6)->create(['user_id' => $user->id]);
+
+        $response = $this->actingAs($user)->get(route('games.newGame'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('games.select-players');
-
-        $response->assertViewHas('players', function ($viewPlayers) use ($players) {
-            return count($viewPlayers->players) === $players->count() &&
-                collect($viewPlayers->players)->pluck('id')->diff($players->pluck('id'))->isEmpty();
-        });
+        $response->assertInertia(
+            fn(Assert $page) => $page
+                ->component('Games/SelectPlayers')
+                ->has('players.players', 6)
+                ->where('players.players.0.player_name', $players[0]->player_name)
+        );
     }
 
     public function test_select_players_creates_game_and_redirects(): void
     {
+        $user = User::factory()->create();
         $players = Player::factory()->count(6)->create();
 
         $selectedPlayers = [
@@ -41,25 +45,25 @@ class GameManagmentControllerTest extends TestCase
             'player6' => $players[5]->player_name,
         ];
 
-        $response = $this->post(route('games.selectPlayers'), $selectedPlayers);
+        $response = $this->actingAs($user)->post(route('games.selectPlayers'), $selectedPlayers);
 
         $response->assertRedirectToRoute('games.pointsForm');
+        // $response->assertSessionHas('selectedPlayers');
+
+        $response->assertSessionHas('selectedPlayers', function ($selectedPlayersListDTO) use ($players) {
+
+            if (! $selectedPlayersListDTO instanceof SelectedPlayersListDTO) {
+                return false;
+            }
+
+            $selectedPlayersCollection = $selectedPlayersListDTO->selectedPlayers;
+
+            if ($selectedPlayersCollection->count() !== 6) {
+                return false;
+            }
+            return $selectedPlayersCollection->pluck('playerName')->toArray() === $players->pluck('player_name')->toArray();
+        });
         $response->assertStatus(302);
-
-        $gameData = session('gameData');
-
-        $this->assertInstanceOf(GameDataDTO::class, $gameData);
-        $this->assertNotNull($gameData->allPlayersResults);
-
-        foreach ($gameData->allPlayersResults->playersResults as $playerResult) {
-            $this->assertInstanceOf(OnePlayerResultDTO::class, $playerResult);
-            $this->assertContains($playerResult->playerName, array_values($selectedPlayers));
-        }
-
-        $this->assertDatabaseEmpty('games');
-
-        $this->assertIsInt($gameData->id);
-        $this->assertEquals(1, $gameData->id);
     }
 
     public function test_points_form_return_correct_view(): void
@@ -68,38 +72,17 @@ class GameManagmentControllerTest extends TestCase
 
         $players = Player::factory()->count(3)->create();
 
-        $playersResults = collect();
+        $playersResults = new SelectedPlayersListDTO($players);
 
-        foreach ($players as $player) {
-            $playersResults->push((object) [
-                'playerId' => $player->id,
-                'playerName' => $player->player_name,
-            ]);
-        }
+        $this->withSession(['selectedPlayers' => $playersResults]);
 
-        $gameData = new GameDataDTO(
-            1,  // gameId
-            new AllPlayersResultsDTO($playersResults),
-        );
-
-        $this->withSession(['gameData' => $gameData]);
-
-        $response = $this->get(route('games.pointsForm'));
+        $response = $this->actingAs($user)->get(route('games.pointsForm'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('games.points');
-        $response->assertViewHas('players', function ($playersInView) use ($players) {
-            if ($playersInView->count() !== $players->count()) {
-                return false;
-            }
-
-            foreach ($players as $player) {
-                if (!$playersInView->contains($player->player_name)) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
+        $response->assertInertia(
+            fn(Assert $page) => $page
+                ->component('Games/PointsCalculator')
+                ->has('players', 3)
+        );
     }
 }
