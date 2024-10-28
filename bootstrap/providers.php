@@ -5,4 +5,5 @@ return [
     App\Providers\GameServiceProvider::class,
     App\Providers\PlayerServiceProvider::class,
     App\Providers\PointsServiceProvider::class,
+    App\Providers\StatisticServiceProvider::class,
 ];

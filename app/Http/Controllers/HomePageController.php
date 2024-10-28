@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\StatisticsService;
+use App\Interfaces\StatisticInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -13,10 +13,10 @@ class HomePageController extends Controller
     /**
      * Show the form for creating the resource.
      */
-    public function index(StatisticsService $statisticsService): Response
+    public function index(StatisticInterface $statisticService): Response
     {
         session()->forget('gameData');
-        $data = $statisticsService->getLastGameStatistics();
+        $data = $statisticService->getLastGameStatistics();
 
         return Inertia::render('Welcome', [
             'results' => $data['results'] ? $data['results']->toArray() : [],

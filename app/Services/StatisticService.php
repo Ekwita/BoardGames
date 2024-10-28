@@ -3,9 +3,10 @@
 namespace App\Services;
 
 use App\DTOs\GamesListDTO;
+use App\Interfaces\StatisticInterface;
 use Illuminate\Support\Facades\Auth;
 
-class StatisticsService
+class StatisticService implements StatisticInterface
 {
     /**
      * Get list of all games and return data to controller
@@ -46,7 +47,6 @@ class StatisticsService
         return ['games' => $paginatedGames];
     }
 
-    //
     public function getLastGameStatistics(): array
     {
         $data = [
