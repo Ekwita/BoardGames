@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePlayerRequest;
-use App\Interfaces\PlayerDisplayInterface;
 use App\Interfaces\PlayerServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -30,8 +29,7 @@ class PlayerController extends Controller
      */
     public function store(StorePlayerRequest $request): RedirectResponse
     {
-        $createPlayerDto = $request->getDto();
-        $this->playerService->createPlayer($createPlayerDto);
+        $this->playerService->createPlayer($request->getDto());
 
         return back();
     }

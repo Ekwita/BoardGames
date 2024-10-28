@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\StatisticsService;
+use App\Interfaces\StatisticInterface;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class GameStatisticController extends Controller
 {
-    public function __construct(protected StatisticsService $statisticsService) {}
+    public function __construct(protected StatisticInterface $statisticsService) {}
 
     /**
      * Display a list of all games with statistics.

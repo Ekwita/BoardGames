@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\DTOs\PlayerDTO;
 use App\DTOs\Players\CreatePlayerDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,7 +12,7 @@ class StorePlayerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     /**
