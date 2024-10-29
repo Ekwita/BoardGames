@@ -26,18 +26,18 @@ class PointsServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(PlayerPointsCalculatorInterface::class, function ($app, $params) {
-            $alivePlayerResultCreate = new AlivePlayerResultCreate;
-            $alivePlayerStatsUpdate = new AlivePlayerStatsUpdate;
-            $deadPlayerResultCreate = new DeadPlayerResultCreate;
-            $deadPlayerStatsUpdate = new DeadPlayerStatsUpdate;
+        // $this->app->bind(PlayerPointsCalculatorInterface::class, function ($app, $params) {
+        //     $alivePlayerResultCreate = new AlivePlayerResultCreate;
+        //     $alivePlayerStatsUpdate = new AlivePlayerStatsUpdate;
+        //     $deadPlayerResultCreate = new DeadPlayerResultCreate;
+        //     $deadPlayerStatsUpdate = new DeadPlayerStatsUpdate;
 
-            if ($params['type'] == 1) {
-                return new DeadPlayerPointsStrategy($deadPlayerResultCreate, $deadPlayerStatsUpdate);
-            } else {
-                return new AlivePlayerPointsStrategy($alivePlayerResultCreate,  $alivePlayerStatsUpdate);
-            }
-        });
+        //     if ($params['type'] == 1) {
+        //         return new DeadPlayerPointsStrategy($deadPlayerResultCreate, $deadPlayerStatsUpdate);
+        //     } else {
+        //         return new AlivePlayerPointsStrategy($alivePlayerResultCreate,  $alivePlayerStatsUpdate);
+        //     }
+        // });
         $this->app->bind(SetWinnerInterface::class, SetWinner::class);
         $this->app->bind(PointsCalculatorInterface::class, PointsCalculatorService::class);
         $this->app->bind(PlayerPointsServiceInterface::class, PlayerPointsService::class);
