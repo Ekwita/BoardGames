@@ -7,10 +7,16 @@ use App\Actions\Interfaces\PlayerStatsUpdateInterface;
 use App\DTOs\NewGameParams\OnePlayerResultDTO;
 use App\Enums\ArtifactType;
 use App\Interfaces\PlayerPointsCalculatorInterface;
+use App\Interfaces\PlayerStatusStrategyInterface;
 
-class AlivePlayerPointsStrategy implements PlayerPointsCalculatorInterface
+class AlivePlayerPointsStrategy implements PlayerPointsCalculatorInterface, PlayerStatusStrategyInterface
 {
     public function __construct(protected PlayerResultCreateInterface $playerResultCreate, protected PlayerStatsUpdateInterface $playerStatsUpdate) {}
+
+    public function isSatisfiedBy($playerStatus): bool
+    {
+        return $playerStatus !== 1;
+    }
 
     public function calculatePoints(OnePlayerResultDTO $dto): array
     {
@@ -23,12 +29,12 @@ class AlivePlayerPointsStrategy implements PlayerPointsCalculatorInterface
 
         $artifactsData = $this->calculateArifactsPoints($dto);
 
-        
+
         $totalPoints = $statusPoints + $artifactsData['totalArtifactsPoints'] + $gold + $tokens + $cards;
-        
+
         //Update DTO object
         $dto->totalPoints = $totalPoints;
-        
+
         // Create PlayerResult
         $this->playerResultCreate->handle($dto);
         $this->playerStatsUpdate->handle($dto);
