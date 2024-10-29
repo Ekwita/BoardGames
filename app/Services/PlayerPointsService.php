@@ -7,8 +7,6 @@ use App\DTOs\NewGameParams\PlayerPointsComparisonDTO;
 use App\Enums\PlayerStatusStrategyEnum;
 use App\Interfaces\PlayerPointsServiceInterface;
 use App\Interfaces\PlayerStatusStrategyInterface;
-use App\Strategies\AlivePlayerPointsStrategy;
-use App\Strategies\DeadPlayerPointsStrategy;
 use Illuminate\Contracts\Foundation\Application;
 
 class PlayerPointsService implements PlayerPointsServiceInterface
