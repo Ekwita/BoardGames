@@ -137,31 +137,31 @@ function submitForm() {
                             <div class="artifacts">
                                 <label :for="'art5_' + player" class="block mb-1">Artifact - 5 points</label>
                                 <input type="checkbox" :id="'art5_' + player" :name="'art5_' + player" class="mb-2"
-                                    v-model="playerData[player].artifacts.art5">
+                                    v-model="playerData[player].artifacts.art5" :value=1>
                                 <label :for="'art7_' + player" class="block mb-1">Artifact - 7 points</label>
-                                <input type="checkbox" :id="'art5_' + player" :name="'art7_' + player" class="mb-2"
-                                    v-model="playerData[player].artifacts.art7">
+                                <input type="checkbox" :id="'art7_' + player" :name="'art7_' + player" class="mb-2"
+                                    v-model="playerData[player].artifacts.art7" :value=1>
                                 <label :for="'art10_' + player" class="block mb-1">Artifact - 10 points</label>
-                                <input type="checkbox" :id="'art10_' + player" :name="'art10_' + player" class="mb-2"
-                                    v-model="playerData[player].artifacts.art10">
+                                <input type="checkbox" :id="'art10_' + player" :name="'art10_' + player" class="mb-2"   
+                                    v-model="playerData[player].artifacts.art10" :value=1>
                                 <label :for="'art12_' + player" class="block mb-1">Artifact - 12 points</label>
                                 <input type="checkbox" :id="'art12_' + player" :name="'art12_' + player" class="mb-2"
-                                    v-model="playerData[player].artifacts.art12">
+                                    v-model="playerData[player].artifacts.art12" :value=1>
                                 <label :for="'art15_' + player" class="block mb-1">Artifact - 15 points</label>
                                 <input type="checkbox" :id="'art15_' + player" :name="'art15_' + player" class="mb-2"
-                                    v-model="playerData[player].artifacts.art15">
+                                    v-model="playerData[player].artifacts.art15" :value=1>
                                 <label :for="'art17_' + player" class="block mb-1">Artifact - 17 points</label>
                                 <input type="checkbox" :id="'art17_' + player" :name="'art17_' + player" class="mb-2"
-                                    v-model="playerData[player].artifacts.art17">
+                                    v-model="playerData[player].artifacts.art17" :value=1>
                                 <label :for="'art20_' + player" class="block mb-1">Artifact - 20 points</label>
                                 <input type="checkbox" :id="'art20_' + player" :name="'art20_' + player" class="mb-2"
-                                    v-model="playerData[player].artifacts.art20">
+                                    v-model="playerData[player].artifacts.art20" :value=1>
                                 <label :for="'art25_' + player" class="block mb-1">Artifact - 25 points</label>
                                 <input type="checkbox" :id="'art25_' + player" :name="'art25_' + player" class="mb-2"
-                                    v-model="playerData[player].artifacts.art25">
+                                    v-model="playerData[player].artifacts.art25" :value=1>
                                 <label :for="'art30_' + player" class="block mb-1">Artifact - 30 points</label>
                                 <input type="checkbox" :id="'art30_' + player" :name="'art30_' + player" class="mb-2"
-                                    v-model="playerData[player].artifacts.art30">
+                                    v-model="playerData[player].artifacts.art30" :value=1>
 
 
                             </div>

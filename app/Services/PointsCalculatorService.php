@@ -9,10 +9,10 @@ use App\DTOs\NewGameParams\GameDataDTO;
 use App\DTOs\NewGameParams\PlayerPointsComparisonDTO;
 use App\Factories\GameFactory;
 use App\Factories\OnePlayerResultFactory;
+use App\Http\Requests\PlayerPointRequest;
 use App\Interfaces\GameResultServiceInterface;
 use App\Interfaces\PlayerPointsServiceInterface;
 use App\Interfaces\PointsCalculatorInterface;
-use Illuminate\Http\Request;
 
 class PointsCalculatorService implements PointsCalculatorInterface
 {
@@ -28,7 +28,7 @@ class PointsCalculatorService implements PointsCalculatorInterface
     /**
      * Calculate points for each player
      */
-    public function pointsCalculator(Request $request): array
+    public function pointsCalculator(PlayerPointRequest $request): array
     {
         //Create new game
         $gameData = $this->gameFactory->create($request);

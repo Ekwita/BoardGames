@@ -5,11 +5,11 @@ namespace App\Factories;
 use App\DTOs\NewGameParams\GameDataDTO;
 use App\DTOs\NewGameParams\OnePlayerResultDTO;
 use App\DTOs\NewGameParams\SelectedPlayerDTO;
-use Illuminate\Http\Request;
+use App\Http\Requests\PlayerPointRequest;
 
 class OnePlayerResultFactory
 {
-    public function createDto(GameDataDTO $gameData, SelectedPlayerDTO $selectedPlayer, Request $request): OnePlayerResultDTO
+    public function createDto(GameDataDTO $gameData, SelectedPlayerDTO $selectedPlayer, PlayerPointRequest $request): OnePlayerResultDTO
     {
         return new OnePlayerResultDTO(
             gameId: $gameData->id,
@@ -25,9 +25,9 @@ class OnePlayerResultFactory
             art20: $request->has('art20_' . $selectedPlayer->playerName),
             art25: $request->has('art25_' . $selectedPlayer->playerName),
             art30: $request->has('art30_' . $selectedPlayer->playerName),
-            gold: $request->input('gold_' . $selectedPlayer->playerName),
-            tokens: $request->input('tokens_' . $selectedPlayer->playerName),
-            cards: $request->input('cards_' . $selectedPlayer->playerName),
+            gold: $request->input('gold_' . $selectedPlayer->playerName) ?? 0,
+            tokens: $request->input('tokens_' . $selectedPlayer->playerName) ?? 0,
+            cards: $request->input('cards_' . $selectedPlayer->playerName) ?? 0,
         );
     }
 }

@@ -2,10 +2,9 @@
 
 namespace App\Interfaces;
 
-use App\Http\Requests\PlayerPointsRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\PlayerPointRequest;
 
 interface PointsCalculatorInterface
 {
-    public function pointsCalculator(Request $request): array;
+    public function pointsCalculator(PlayerPointRequest $request): array;
 }
