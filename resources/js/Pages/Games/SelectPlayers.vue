@@ -1,11 +1,12 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 const props = defineProps({
     players: {
-        type: Object, // AllPlayersListDTO with players collection
+        type: Object,
         default: () => ({
-            players: [], // Default value
+            players: [],
         }),
     },
 });
@@ -18,7 +19,6 @@ const form = useForm({
     player5: '',
     player6: '',
 });
-
 
 const submitPlayers = () => {
     form.post(route('games.selectPlayers'), {
@@ -38,6 +38,20 @@ const submitNewPlayer = () => {
         preserveScroll: true,
     });
 };
+
+// Computed property to track selected players
+const selectedPlayers = computed(() => {
+    // Create an array of selected player names
+    return Object.values(form).filter(player => player);
+});
+
+// Computed function to filter players based on selected ones
+const availablePlayers = (currentPlayer) => {
+    return props.players.players.filter(
+        player => !selectedPlayers.value.includes(player.player_name) || player.player_name === currentPlayer
+    );
+};
+
 </script>
 
 <template>
@@ -57,7 +71,9 @@ const submitNewPlayer = () => {
                     <select v-model="form['player' + i]" :id="'player' + i"
                         class="w-full mt-2 p-2 border border-gray-300 rounded-md">
                         <option value="" selected>none</option>
-                        <option v-for="player in players.players" :key="player.player_name" :value="player.player_name">
+                        <!-- Filter available players to exclude selected ones -->
+                        <option v-for="player in availablePlayers(form['player' + i])" :key="player.player_name"
+                            :value="player.player_name">
                             {{ player.player_name }}
                         </option>
                     </select>
