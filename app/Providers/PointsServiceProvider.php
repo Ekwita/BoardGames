@@ -12,6 +12,8 @@ use App\Actions\PlayersStats\DeadPlayerStatsUpdate;
 use App\Interfaces\PlayerPointsServiceInterface;
 use App\Interfaces\PointsCalculatorInterface;
 use App\Actions\Interfaces\SetWinnerInterface;
+use App\Factories\Interfaces\StatusStrategyInterface;
+use App\Factories\StatusStrategyFactory;
 use App\Services\PlayerPointsService;
 use App\Services\PointsCalculatorService;
 use App\Strategies\AlivePlayerPointsStrategy;
@@ -25,6 +27,7 @@ class PointsServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(StatusStrategyInterface::class, StatusStrategyFactory::class);
         $this->app->bind(SetWinnerInterface::class, SetWinner::class);
         $this->app->bind(PointsCalculatorInterface::class, PointsCalculatorService::class);
         $this->app->bind(PlayerPointsServiceInterface::class, PlayerPointsService::class);
