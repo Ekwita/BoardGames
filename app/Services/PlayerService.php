@@ -24,7 +24,7 @@ class PlayerService implements PlayerServiceInterface
         Player::create($createPlayerDto->toArray());
     }
 
-    public function getPlayerById(int $playerId): PlayerStatisticDTO
+    public function getPlayerById(string $playerId): PlayerStatisticDTO
     {
         $player = Player::findOrFail($playerId);
         return $player->mapToDto();

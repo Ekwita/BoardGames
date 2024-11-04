@@ -11,5 +11,5 @@ interface PlayerServiceInterface
 
     public function getAllPlayers(): Collection;
     public function createPlayer(CreatePlayerDTO $createPlayerDto): void;
-    public function getPlayerById(int $playerId): PlayerStatisticDTO;
+    public function getPlayerById(string $playerId): PlayerStatisticDTO;
 }

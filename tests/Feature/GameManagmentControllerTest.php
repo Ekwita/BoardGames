@@ -37,12 +37,12 @@ class GameManagmentControllerTest extends TestCase
         $players = Player::factory()->count(6)->create();
 
         $selectedPlayers = [
-            'player1' => $players[0]->player_name,
-            'player2' => $players[1]->player_name,
-            'player3' => $players[2]->player_name,
-            'player4' => $players[3]->player_name,
-            'player5' => $players[4]->player_name,
-            'player6' => $players[5]->player_name,
+            'player1' => $players[0]->id,
+            'player2' => $players[1]->id,
+            'player3' => $players[2]->id,
+            'player4' => $players[3]->id,
+            'player5' => $players[4]->id,
+            'player6' => $players[5]->id,
         ];
 
         $response = $this->actingAs($user)->post(route('games.selectPlayers'), $selectedPlayers);

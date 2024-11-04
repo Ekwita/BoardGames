@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('players', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('player_name');
             $table->foreignId('user_id')->constrained();
             $table->integer('games')->default('0');

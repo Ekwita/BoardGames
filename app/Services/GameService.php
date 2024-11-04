@@ -20,7 +20,9 @@ class GameService implements GameInterface
     //Get players list from database
     public function getPlayersList(): AllPlayersListDTO
     {
-        $players = Auth::user()->players()->select('id', 'player_name')->get();
+        $user = Auth::user();
+        $players = Player::where('user_id', $user->id)->get();
+        
         $allPlayersList =  PlayersListFactory::createAllPlayersList($players);
 
         return $allPlayersList;
@@ -34,11 +36,12 @@ class GameService implements GameInterface
     {
 
         $playersInGame = $this->selectPlayersInGame($request);
+
         $selectedPlayers = collect();
 
-        foreach ($playersInGame as $player) {
-            $playerId = Player::where('player_name', $player)->pluck('id')->first();
-            $selectedPlayers->push(SelectPlayerFactory::addPlayerToGame($playerId, $player));
+        foreach ($playersInGame as $playerId) {
+            $playerName = Player::where('id', $playerId)->pluck('player_name')->first();
+            $selectedPlayers->push(SelectPlayerFactory::addPlayerToGame($playerId, $playerName));
         }
 
         $playersList = new SelectedPlayersListDTO($selectedPlayers);
@@ -53,9 +56,12 @@ class GameService implements GameInterface
     {
         $playersList = session()->get('selectedPlayers');
         $players = $playersList->selectedPlayers->map(function ($selectedPlayer) {
-            return $selectedPlayer->playerName;
+            return [
+                'playerId' => $selectedPlayer->playerId,
+                'playerName' => $selectedPlayer->playerName
+            ];
         });
-
+        // dd($players);
         return $players;
     }
 

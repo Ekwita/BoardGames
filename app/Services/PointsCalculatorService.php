@@ -35,13 +35,13 @@ class PointsCalculatorService implements PointsCalculatorInterface
 
         $selectedPlayersObject = session()->get('selectedPlayers');
         $selectedPlayers = $selectedPlayersObject->selectedPlayers;
-
+        // dd($selectedPlayers);
         $playerPoints = new PlayerPointsComparisonDTO();
-
+        // dd($request->all());
         foreach ($selectedPlayers as $selectedPlayer) {
             //Create DTO form request data
             $dto = $this->onePlayerResultFactory->createDto($gameData, $selectedPlayer, $request);
-
+            // dd($dto);
             //Select best player after calculating points
             $bestPlayer = $this->playerPointsService->calculate($dto, $playerPoints);
         }

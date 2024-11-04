@@ -25,29 +25,23 @@ class GamePointControllerTest extends TestCase
             $playersList->push($onePlayer);
         }
         $playersList = new SelectedPlayersListDTO($playersList);
-        // $players = Player::factory()->createMany([
-        //     ['player_name' => 'John'],
-        //     ['player_name' => 'Jan']
-        // ]);
-        // dd($players);
+
         $requestData = [];
         foreach ($players as $player) {
             $requestData = array_merge($requestData, [
-                'status_' . $player->player_name => fake()->numberBetween(1, 3),
-                'gold_' . $player->player_name => fake()->numberBetween(0, 21),
-                'tokens_' . $player->player_name => fake()->numberBetween(0, 40),
-                'cards_' . $player->player_name => fake()->numberBetween(0, 50),
+                'status_' . $player->id => fake()->numberBetween(1, 3),
+                'gold_' . $player->id => fake()->numberBetween(0, 21),
+                'tokens_' . $player->id => fake()->numberBetween(0, 40),
+                'cards_' . $player->id => fake()->numberBetween(0, 50),
                 // Artifacts
-                'art5_' . $player->player_name => fake()->boolean(),
-                'art7_' . $player->player_name => fake()->boolean(),
-                'art10_' . $player->player_name => fake()->boolean(),
-                'art12_' . $player->player_name => fake()->boolean(),
+                'art5_' . $player->id => fake()->boolean(),
+                'art7_' . $player->id => fake()->boolean(),
+                'art10_' . $player->id => fake()->boolean(),
+                'art12_' . $player->id => fake()->boolean(),
             ]);
         }
 
         $this->withSession(['selectedPlayers' => $playersList]);
-
-        // dd(session()->get('selectedPlayers'));
 
         $response = $this->actingAs($user)->post(route('games.pointsCalculate', $requestData));
 

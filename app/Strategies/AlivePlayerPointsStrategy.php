@@ -34,7 +34,7 @@ class AlivePlayerPointsStrategy implements PlayerPointsCalculatorInterface, Play
 
         //Update DTO object
         $dto->totalPoints = $totalPoints;
-
+        // dd($dto);
         // Create PlayerResult
         $this->playerResultCreate->handle($dto);
         $this->playerStatsUpdate->handle($dto);

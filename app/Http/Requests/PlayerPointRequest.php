@@ -22,29 +22,30 @@ class PlayerPointRequest extends FormRequest
      */
     public function rules(): array
     {
-        $selectedPlayersObject = session()->get('selectedPlayers');
-        $selectedPlayers = $selectedPlayersObject->selectedPlayers;
+        // $selectedPlayersObject = session()->get('selectedPlayers');
+        // $selectedPlayers = $selectedPlayersObject->selectedPlayers;
 
-        $rules = [];
+        // $rules = [];
 
-        foreach ($selectedPlayers as $player) {
-            $playerName = $player->playerName;
+        // foreach ($selectedPlayers as $player) {
+        //     $playerName = $player->playerName;
 
-            $rules['status_' . $playerName] = 'required|integer|in:1,2,3';
-            $rules['art5_' . $playerName] = 'nullable|boolean';
-            $rules['art7_' . $playerName] = 'nullable|boolean';
-            $rules['art10_' . $playerName] = 'nullable|boolean';
-            $rules['art12_' . $playerName] = 'nullable|boolean';
-            $rules['art15_' . $playerName] = 'nullable|boolean';
-            $rules['art17_' . $playerName] = 'nullable|boolean';
-            $rules['art20_' . $playerName] = 'nullable|boolean';
-            $rules['art25_' . $playerName] = 'nullable|boolean';
-            $rules['art30_' . $playerName] = 'nullable|boolean';
-            $rules['gold_' . $playerName] = 'nullable|integer|min:0';
-            $rules['tokens_' . $playerName] = 'nullable|integer|min:0';
-            $rules['cards_' . $playerName] = 'nullable|integer|min:0';
-        }
+        //     $rules['status_' . $playerName] = 'required|integer|in:1,2,3';
+        //     $rules['art5_' . $playerName] = 'nullable|boolean';
+        //     $rules['art7_' . $playerName] = 'nullable|boolean';
+        //     $rules['art10_' . $playerName] = 'nullable|boolean';
+        //     $rules['art12_' . $playerName] = 'nullable|boolean';
+        //     $rules['art15_' . $playerName] = 'nullable|boolean';
+        //     $rules['art17_' . $playerName] = 'nullable|boolean';
+        //     $rules['art20_' . $playerName] = 'nullable|boolean';
+        //     $rules['art25_' . $playerName] = 'nullable|boolean';
+        //     $rules['art30_' . $playerName] = 'nullable|boolean';
+        //     $rules['gold_' . $playerName] = 'nullable|integer|min:0';
+        //     $rules['tokens_' . $playerName] = 'nullable|integer|min:0';
+        //     $rules['cards_' . $playerName] = 'nullable|integer|min:0';
+        // }
 
-        return $rules;
+        // return $rules;
+        return [];
     }
 }

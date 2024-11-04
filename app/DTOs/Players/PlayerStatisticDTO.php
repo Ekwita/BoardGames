@@ -5,7 +5,7 @@ namespace App\DTOs\Players;
 class PlayerStatisticDTO
 {
     public function __construct(
-        public int $id,
+        public string $id,
         public int $user_id,
         public string $player_name,
         public int $games = 0,

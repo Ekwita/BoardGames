@@ -52,6 +52,7 @@ const availablePlayers = (currentPlayer) => {
     );
 };
 
+
 </script>
 
 <template>
@@ -72,8 +73,8 @@ const availablePlayers = (currentPlayer) => {
                         class="w-full mt-2 p-2 border border-gray-300 rounded-md">
                         <option value="" selected>none</option>
                         <!-- Filter available players to exclude selected ones -->
-                        <option v-for="player in availablePlayers(form['player' + i])" :key="player.player_name"
-                            :value="player.player_name">
+                        <option v-for="player in availablePlayers(form['player' + i])" :key="player.id"
+                            :value="player.id">
                             {{ player.player_name }}
                         </option>
                     </select>

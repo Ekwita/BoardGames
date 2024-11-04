@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('game_id')->constrained();
-            $table->foreignId('player_id')->constrained();
+            $table->foreignUuid('player_id')->constrained();
             $table->string('player_name');
             $table->integer('status');
             $table->boolean('art5')->nullable()->default(0);

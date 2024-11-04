@@ -16,6 +16,7 @@ class GamePointController extends Controller
      */
     public function pointsCalculate(PlayerPointRequest $request): Response
     {
+        // dd($request->all());
         $resultData = $this->pointsCalculator->pointsCalculator($request);
 
         return Inertia::render('Games/Result', [

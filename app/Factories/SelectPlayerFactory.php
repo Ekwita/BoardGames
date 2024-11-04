@@ -6,7 +6,7 @@ use App\DTOs\NewGameParams\SelectedPlayerDTO;
 
 class SelectPlayerFactory
 {
-    public static function addPlayerToGame(int $id, string $playerName): SelectedPlayerDTO
+    public static function addPlayerToGame(string $id, string $playerName): SelectedPlayerDTO
     {
         return new SelectedPlayerDTO(
             playerId: $id,

@@ -37,7 +37,7 @@ class PlayerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id): Response
+    public function show(string $id): Response
     {
         $playerDTO = $this->playerService->getPlayerById($id);
 

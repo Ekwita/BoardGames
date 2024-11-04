@@ -23,7 +23,7 @@ class StorePlayerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'player_name' => 'required|unique:players|max:30|regex:/^[a-zA-Z0-9]+$/'
+            'player_name' => 'required|string|max:30'
         ];
     }
 

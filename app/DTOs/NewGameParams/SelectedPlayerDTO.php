@@ -5,7 +5,7 @@ namespace App\DTOs\NewGameParams;
 class SelectedPlayerDTO
 {
     public function __construct(
-        public int $playerId,
+        public string $playerId,
         public string $playerName
     ) {}
 

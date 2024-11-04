@@ -10,7 +10,7 @@ class AlivePlayerStatsUpdate implements PlayerStatsUpdateInterface
 {
     public function handle(OnePlayerResultDTO $dto): void
     {
-        $playerToUpdate = Player::where('player_name', $dto->playerName);
+        $playerToUpdate = Player::where('id', $dto->playerId);
         $playerToUpdate->incrementEach([
             'games' => 1,
             'totalgold' => $dto->gold,

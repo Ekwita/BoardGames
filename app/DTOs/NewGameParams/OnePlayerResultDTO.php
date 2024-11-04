@@ -6,7 +6,7 @@ class OnePlayerResultDTO
 {
     public function __construct(
         public ?int $gameId = null,
-        public ?int $playerId = null,
+        public ?string $playerId = null,
         public ?string $playerName = null,
         public ?int $status = null,
         public ?bool $art5 = null,
