@@ -46,8 +46,6 @@ class GameManagmentController extends Controller
 
         return Inertia::render('Games/PointsCalculator', [
             'players' => $players,
-            'csrfToken' => csrf_token(),
-            'actionUrl' => route('games.pointsCalculate')
         ]);
     }
 }
